@@ -2,13 +2,12 @@ package com.cs.moose.types;
 
 public class MachineState {
 	private final int[] memory;
-	private final int nextCommand, currentCommand, accumulator;
+	private final int nextCommand, accumulator;
 
-	public MachineState(int accumulator, int[] memory, int nextCommand, int currentCommand) {
+	public MachineState(int accumulator, int[] memory, int nextCommand) {
 		this.accumulator = accumulator;
 		this.memory = memory;
 		this.nextCommand = nextCommand;
-		this.currentCommand = currentCommand;
 	}
 	
 	public int[] getMemory() {
@@ -17,10 +16,6 @@ public class MachineState {
 
 	public int getNextCommand() {
 		return nextCommand;
-	}
-
-	public int getCurrentCommand() {
-		return currentCommand;
 	}
 	
 	public int getAccumulator() {

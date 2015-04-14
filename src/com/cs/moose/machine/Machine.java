@@ -7,12 +7,13 @@ import java.util.ArrayList;
 public class Machine {
 	private int accumulator;
 	private int[] memory;
-	private int nextCommand, currentCommand;
+	private int nextCommand;
 	
 	private ArrayList<MachineState> previousStates;
 	
 	public Machine(int[] memory) {
-		previousStates = new ArrayList<MachineState>();
+		this.memory = memory;
+		this.previousStates = new ArrayList<MachineState>();
 	}
 	
 	public void goForward() {
@@ -33,12 +34,11 @@ public class Machine {
 	
 	private void fromMachineState(MachineState state) {
 		this.memory = state.getMemory();
-		this.currentCommand = state.getCurrentCommand();
 		this.nextCommand = state.getNextCommand();
 		this.accumulator = state.getAccumulator();
 	}
 	
 	private MachineState toMachineState() {
-		return new MachineState(this.accumulator, this.memory.clone(), this.nextCommand, this.currentCommand);
+		return new MachineState(this.accumulator, this.memory.clone(), this.nextCommand);
 	}
 }

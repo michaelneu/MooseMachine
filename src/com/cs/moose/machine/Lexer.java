@@ -5,15 +5,20 @@ import com.cs.moose.types.*;
 
 import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Lexer {
 	private static final String regexComments = "\\#(.*)",
 			regexJump = "^([A-Za-z0-9\\-]+\\:\\s*)",
-			regexCommand = "([A-Za-z])+",
+			regexCommand = "([A-Za-z]+)",
 			regexParameter = "\\s(\\d+|[A-Za-z0-9\\-]+)",
-			regexJumpCommandParameter = regexJump + "?" + regexCommand + regexParameter, // [ JMP: ]   COMMAND   [ CHARACTERS | NUMBER ]   [ #COMMENT ]
-			regexJumpCommand = regexJump + "?" + regexCommand; // [ JMP: ]   COMMAND   [ #COMMENT ]
+			regexJumpCommand = regexJump + "?" + regexCommand, // [ JMP: ]   COMMAND   [ #COMMENT ]
+			regexJumpCommandParameter = regexJumpCommand + regexParameter, // [ JMP: ]   COMMAND   [ CHARACTERS | NUMBER ]   [ #COMMENT ]
+			regexJumpCall = "(i?)j[a-z]+\\s+[0-9a-z]+"; // JMP POINT
 	
+	static final Pattern patternJumpCommand = Pattern.compile(regexJumpCommand),
+			patternJumpCommandParameter = Pattern.compile(regexJumpCommandParameter);
+
 	private String originalCode;
 	private String[] processedCode;
 	
@@ -81,7 +86,7 @@ public class Lexer {
 	}
 	
 	public String[] getProcessedCode() {
-		return this.processedCode.clone();
+		return this.processedCode;
 	}
 	
 	public Hashtable<String, JumpPoint> getJumpPointDefinitions() {
@@ -135,7 +140,7 @@ public class Lexer {
 		for (int i = 0; i < this.processedCode.length; i++) {
 			String line = this.processedCode[i].trim();
 			
-			if (line.matches("(i?)j[a-z]+\\s+[0-9a-z]+")) {
+			if (line.matches(regexJumpCall)) {
 				String[] parts = line.split("\\s");
 				String name = parts[1]; // parts > 1 because regex matched
 				

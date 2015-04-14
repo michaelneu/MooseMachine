@@ -57,7 +57,8 @@ public enum Command {
 
 	RESET	(1),	// resets the processor
 	NOOP	(0),	// nothing
-	HOLD	(99);	// stops the processor
+	HOLD	(99),	// stops the processor
+	FAIL	(Integer.MIN_VALUE);	// used for compilation purpose
 
 	private static final Command[] commands = Command.values();
 	
