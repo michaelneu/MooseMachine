@@ -21,7 +21,7 @@ public class Compiler {
 			}
 		}
 		
-		int[] memory = new int[MAX_MEMORY_SIZE];
+		short[] memory = new short[MAX_MEMORY_SIZE];
 		String[] code = lexer.getProcessedCode();
 		
 		int i = 0;
@@ -52,6 +52,7 @@ public class Compiler {
 				}
 				
 				switch (memoryCommand) {
+					case NOT:
 					case HOLD:
 					case NOOP: 
 					case RESET: 
@@ -83,7 +84,7 @@ public class Compiler {
 					default: 
 						try {
 							memory[i] = memoryCommand.numeric();
-							memory[i + 1] = Integer.parseInt(parameter);
+							memory[i + 1] = (short)Integer.parseInt(parameter);
 						} catch (Exception ex) {
 							throw new CompilerException("Command \"" + memoryCommand + "\" doesn't support parameters of type \"String\" (given parameter was \"" + parameter + "\")");
 						}

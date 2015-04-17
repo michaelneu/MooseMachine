@@ -67,11 +67,11 @@ public enum Command {
 		this.numericCommand = number;
 	}
 	
-	public int numeric() {
-		return this.numericCommand;
+	public short numeric() {
+		return (short)this.numericCommand;
 	}
 	
-	public static Command fromNumeric(int numeric) {
+	public static Command fromNumeric(short numeric) {
 		for (Command command : commands) {
 			if (command.numeric() == numeric) {
 				return command;

@@ -1,24 +1,30 @@
 package com.cs.moose.types;
 
 public class MachineState {
-	private final int[] memory;
-	private final int nextCommand, accumulator;
+	private final short[] memory;
+	private final short nextCommand, accumulator;
+	private final boolean hold;
 
-	public MachineState(int accumulator, int[] memory, int nextCommand) {
+	public MachineState(short accumulator, short[] memory, short nextCommand, boolean hold) {
 		this.accumulator = accumulator;
 		this.memory = memory;
 		this.nextCommand = nextCommand;
+		this.hold = hold;
 	}
 	
-	public int[] getMemory() {
+	public short[] getMemory() {
 		return memory;
 	}
 
-	public int getNextCommand() {
+	public short getNextCommand() {
 		return nextCommand;
 	}
 	
-	public int getAccumulator() {
+	public short getAccumulator() {
 		return accumulator;
+	}
+	
+	public boolean getHold() {
+		return hold;
 	}
 }

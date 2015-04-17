@@ -13,6 +13,9 @@ public class Main {
 
 			Machine machine = Compiler.getMachine(lexer);
 			machine.goForward();
+			machine.goForward();
+			
+			System.out.println(machine);
 		} catch (SyntaxException ex) {
 			System.out.println("SyntaxException: " + ex.getMessage() + " in line " + ex.getLine());
 		} catch (JumpPointException ex) {

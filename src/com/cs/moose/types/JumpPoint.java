@@ -3,7 +3,7 @@ package com.cs.moose.types;
 public class JumpPoint {
 	private final String name;
 	private final int codeLine;
-	private int memoryPosition;
+	private short memoryPosition;
 	
 	public JumpPoint(String name, int codeLine) {
 		this.name = name;
@@ -18,11 +18,11 @@ public class JumpPoint {
 		return this.codeLine;
 	}
 	
-	public int getMemoryPosition() {
+	public short getMemoryPosition() {
 		return this.memoryPosition;
 	}
 	
-	public void setMemoryPosition(int position) {
+	public void setMemoryPosition(short position) {
 		this.memoryPosition = position;
 	}
 }
