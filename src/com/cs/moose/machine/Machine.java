@@ -23,12 +23,13 @@ public class Machine {
 			MachineState currentState = toMachineState();
 			this.previousStates.add(currentState);
 			
-			// run command
+			// get command
 			short memoryCommand = this.memory[this.nextCommand], 
 					memoryParameter = this.memory[this.nextCommand + 1];
 			
 			Command command = Command.fromNumeric(memoryCommand);
 			
+			// run command
 			try {
 				runCommand(command, memoryParameter);
 			} catch (IndexOutOfBoundsException ex) { // handle outside of memory exceptions
@@ -39,6 +40,7 @@ public class Machine {
 	
 	private void runCommand(Command command, short parameter) throws MachineException, IndexOutOfBoundsException {
 		boolean sequential = true; // used for jumps
+		int tempAccumulator = this.accumulator; // used for detecting short overflow
 		
 		// move value from memory address into memoryParameter if there is another command CMD and CMDI (to not duplicate code)
 		switch (command) {
@@ -77,16 +79,19 @@ public class Machine {
 			case ADD:
 			case ADDI:
 				this.accumulator += parameter;
+				tempAccumulator += parameter;
 				break;
 				
 			case SUB:
 			case SUBI:
 				this.accumulator -= parameter;
+				tempAccumulator -= parameter;
 				break;
 				
 			case MUL:
 			case MULI:
 				this.accumulator *= parameter;
+				tempAccumulator *= parameter;
 				break;
 				
 			case DIV:
@@ -95,6 +100,7 @@ public class Machine {
 					throw new MachineException(command, "Division by zero");
 				} else {
 					this.accumulator /= parameter;
+					tempAccumulator /= parameter;
 				}
 				break;
 				
@@ -104,6 +110,7 @@ public class Machine {
 					throw new MachineException(command, "Division by zero");
 				} else {
 					this.accumulator %= parameter;
+					tempAccumulator %= parameter;
 				}
 				break;
 				
@@ -241,6 +248,12 @@ public class Machine {
 		if (sequential) {
 			this.nextCommand += 2;
 		}
+		
+		if (tempAccumulator > Short.MAX_VALUE || tempAccumulator < Short.MIN_VALUE) {
+			this.flagV = true;
+		} else {
+			this.flagV = false;
+		}
 	}
 	
 	public void goBackwards() {
@@ -258,24 +271,28 @@ public class Machine {
 		this.memory = state.getMemory();
 		this.nextCommand = state.getNextCommand();
 		this.accumulator = state.getAccumulator();
-		this.flagHold = state.getHold();
+		this.flagZero = state.getFlagZero();
+		this.flagNegative = state.getFlagNegative();
+		this.flagHold = state.getFlagHold();
+		this.flagV = state.getFlagV();
+		
 	}
 	
 	public MachineState toMachineState() {
-		return new MachineState(this.accumulator, this.memory.clone(), this.nextCommand, this.flagHold);
+		return new MachineState(this.accumulator, this.memory.clone(), this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV);
 	}
 	
 	@Override
 	public String toString() {
 		final int elementsPerRow = 10;
-		String out = "PC: " + this.nextCommand + "\nAKKU: " + this.accumulator + "\nZero-Flag: " + this.flagZero + "\nNegative-Flag: " + this.flagNegative + "\n\n\t";
+		String out = "PC: " + this.nextCommand + "\t\t\tAKKU: " + this.accumulator + "\n\nZero-Flag: " + this.flagZero + "\tNegative-Flag: " + this.flagNegative + "\n" + "Overflow-Flag: " + this.flagV + "\tHold-Flag: " + this.flagHold + "\n\n\t";
 		
 		for (int i = 0; i < elementsPerRow; i++) {
 			out += i + "\t";
 		}
 		
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 200; i++) {
 			if (i % elementsPerRow == 0) {
 				out += "\n" + i + "\t";
 			}

@@ -12,14 +12,12 @@ public class Main {
 			Lexer lexer = new Lexer(code);
 
 			Machine machine = Compiler.getMachine(lexer);
+			System.out.println(machine + "\n");
 			machine.goForward();
+			System.out.println(machine + "\n");
 			machine.goForward();
-			
-			System.out.println(machine);
-			
-			machine.goBackwards();
-			
-			System.out.println(machine);
+			System.out.println(machine + "\n");
+
 		} catch (SyntaxException ex) {
 			System.out.println("SyntaxException: " + ex.getMessage() + " in line " + ex.getLine());
 		} catch (JumpPointException ex) {

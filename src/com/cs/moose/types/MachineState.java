@@ -3,28 +3,40 @@ package com.cs.moose.types;
 public class MachineState {
 	private final short[] memory;
 	private final short nextCommand, accumulator;
-	private final boolean hold;
+	private final boolean flagZero, flagNegative, flagHold, flagV;
 
-	public MachineState(short accumulator, short[] memory, short nextCommand, boolean hold) {
+	public MachineState(short accumulator, short[] memory, short nextCommand, boolean flagZero, boolean flagNegative, boolean flagHold, boolean flagV) {
 		this.accumulator = accumulator;
 		this.memory = memory;
 		this.nextCommand = nextCommand;
-		this.hold = hold;
+		this.flagZero = flagZero;
+		this.flagNegative = flagNegative;
+		this.flagHold = flagHold;
+		this.flagV = flagV;
 	}
 	
 	public short[] getMemory() {
-		return memory;
+		return this.memory;
 	}
 
 	public short getNextCommand() {
-		return nextCommand;
+		return this.nextCommand;
 	}
 	
 	public short getAccumulator() {
-		return accumulator;
+		return this.accumulator;
 	}
-	
-	public boolean getHold() {
-		return hold;
+
+	public boolean getFlagHold() {
+		return this.flagHold;
+	}
+	public boolean getFlagZero() {
+		return this.flagZero;
+	}
+	public boolean getFlagNegative() {
+		return this.flagNegative;
+	}
+	public boolean getFlagV() {
+		return this.flagV;
 	}
 }
