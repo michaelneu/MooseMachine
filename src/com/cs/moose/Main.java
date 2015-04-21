@@ -16,6 +16,10 @@ public class Main {
 			machine.goForward();
 			
 			System.out.println(machine);
+			
+			machine.goBackwards();
+			
+			System.out.println(machine);
 		} catch (SyntaxException ex) {
 			System.out.println("SyntaxException: " + ex.getMessage() + " in line " + ex.getLine());
 		} catch (JumpPointException ex) {

@@ -157,6 +157,7 @@ public class Machine {
 					this.accumulator >>= parameter;
 				}
 				break;
+			
 				
 				
 			// jump action
