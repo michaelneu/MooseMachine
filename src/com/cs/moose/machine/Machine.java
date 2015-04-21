@@ -156,6 +156,19 @@ public class Machine {
 				
 			case SHR:
 			case SHRI:
+				if (parameter < 1) {
+					throw new MachineException(command, "Invalid shifting parameter");
+				} else {
+					short antiShift = 0;
+					for (int j = 0; j < parameter; j++) {
+						antiShift += (short)(1 << 15 - j);
+					}
+					
+					this.accumulator >>= parameter;
+					this.accumulator ^= antiShift;
+				}
+				break;
+				
 			case SHRA:
 			case SHRAI:
 				if (parameter < 1) {
