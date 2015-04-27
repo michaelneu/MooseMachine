@@ -1,5 +1,7 @@
 package com.cs.moose.types;
 
+import java.util.HashMap;
+
 public enum Command {
 	LOAD	(276),	// ax = valueof(var)
 	LOADI	(532),	// ax = var
@@ -60,7 +62,18 @@ public enum Command {
 	HOLD	(99),	// stops the processor
 	FAIL	(Integer.MIN_VALUE);	// used for compilation purpose
 
-	private static final Command[] commands = Command.values();
+	private static HashMap<Short, Command> commands;
+	static {
+		commands = new HashMap<Short, Command>();
+		
+		for (Command command : Command.values()) {
+			short numeric = command.numeric();
+			
+			if (!commands.containsKey(numeric)) {
+				commands.put(numeric, command);
+			}
+		}
+	}
 	
 	private final int numericCommand;
 	private Command(int number) {
@@ -72,10 +85,8 @@ public enum Command {
 	}
 	
 	public static Command fromNumeric(short numeric) {
-		for (Command command : commands) {
-			if (command.numeric() == numeric) {
-				return command;
-			}
+		if (commands.containsKey(numeric)) {
+			return commands.get(numeric);
 		}
 		
 		return null;

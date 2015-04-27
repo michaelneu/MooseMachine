@@ -10,30 +10,35 @@ public class Machine {
 	private short[] memory;
 	private boolean flagZero, flagNegative, flagV, flagHold;
 	
-	private ArrayList<MachineState> previousStates;
+	private ArrayList<MachineDiff> previousStates;
 	
 	public Machine(short[] memory) {
 		this.memory = memory;
-		this.previousStates = new ArrayList<MachineState>();
+		this.previousStates = new ArrayList<MachineDiff>();
 	}
 	
 	public void goForward() throws MachineException {
 		if (!flagHold) {
-			// save current state
-			MachineState currentState = toMachineState();
-			this.previousStates.add(currentState);
-			
 			// get command
 			short memoryCommand = this.memory[this.nextCommand], 
 					memoryParameter = this.memory[this.nextCommand + 1];
 			
 			Command command = Command.fromNumeric(memoryCommand);
 			
-			// run command
 			try {
+				// save current state
+				MachineDiff state;
+				if (command == Command.STORE) {
+					state = new MachineDiff(this.accumulator, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV, memoryParameter, this.memory[memoryParameter]);
+				} else {
+					state = new MachineDiff(this.accumulator, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV);
+				}
+				this.previousStates.add(state);
+
+				// run command
 				runCommand(command, memoryParameter);
 			} catch (IndexOutOfBoundsException ex) { // handle outside of memory exceptions
-				throw new MachineException(null, "Invalid memory address");
+				throw new MachineException(null, "Invalid memory address ");
 			}
 		}
 	}
@@ -116,11 +121,12 @@ public class Machine {
 				
 			case CMP:
 			case CMPI:
-				parameter = (short)(parameter - this.accumulator);
+				this.flagNegative = false;
+				this.flagZero = false;
 				
-				if (parameter < 0) {
+				if (this.accumulator < parameter) {
 					this.flagNegative = true;
-				} else {
+				} else if (this.accumulator == parameter) {
 					this.flagZero = true;
 				}
 				break;
@@ -269,30 +275,41 @@ public class Machine {
 		}
 	}
 	
-	public void goBackwards() {
+	public boolean goBackwards() {
 		int length = this.previousStates.size();
 		
 		if (length > 0) {
-			MachineState lastState = this.previousStates.get(length - 1);
+			MachineDiff lastState = this.previousStates.get(length - 1);
 			this.previousStates.remove(length - 1);
 			
-			fromMachineState(lastState);
+			fromMachineDiff(lastState);
+			
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
-	private void fromMachineState(MachineState state) {
-		this.memory = state.getMemory();
+	private void fromMachineDiff(MachineDiff state) {
+		if (state.isMemoryAffected()) {
+			this.memory[state.getAffectedMemoryCell()] = state.getMemoryCellValue();
+		}
+		
 		this.nextCommand = state.getNextCommand();
 		this.accumulator = state.getAccumulator();
+		
 		this.flagZero = state.getFlagZero();
 		this.flagNegative = state.getFlagNegative();
 		this.flagHold = state.getFlagHold();
 		this.flagV = state.getFlagV();
-		
 	}
 	
 	public MachineState toMachineState() {
 		return new MachineState(this.accumulator, this.memory.clone(), this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV);
+	}
+	
+	public boolean isRunning() {
+		return !this.flagHold;
 	}
 	
 	@Override
