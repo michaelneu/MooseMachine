@@ -314,6 +314,9 @@ public class Machine {
 	
 	@Override
 	public String toString() {
+		return toString(20);
+	}
+	public String toString(int rows) {
 		final int elementsPerRow = 10;
 		String out = "PC: " + this.nextCommand + "\t\t\tAKKU: " + this.accumulator + "\n\nZero-Flag: " + this.flagZero + "\tNegative-Flag: " + this.flagNegative + "\n" + "Overflow-Flag: " + this.flagV + "\tHold-Flag: " + this.flagHold + "\n\n\t";
 		
@@ -322,7 +325,7 @@ public class Machine {
 		}
 		
 		
-		for (int i = 0; i < 200; i++) {
+		for (int i = 0; i < rows * 10; i++) {
 			if (i % elementsPerRow == 0) {
 				out += "\n" + i + "\t";
 			}

@@ -1,0 +1,89 @@
+/*
+ * general
+ */
+*:focused {
+	/*-fx-focus-color: -fx-control-inner-background;*/
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+}
+
+.bold {
+	-fx-font-weight: bold;
+}
+
+.right {
+	-fx-text-alignment: right;
+}
+
+
+
+/*
+ * titlebar
+ */
+.title-bar {
+	-fx-background-color: #f7f7f7;
+}
+
+.logo {
+	-fx-background-color: #31B404;
+}
+.logo.debug {
+	-fx-background-color: red !important;
+}
+
+
+
+
+/*
+ * main menu
+ */
+.hotdog {
+	-fx-background-color: #f0f0f0;
+	-fx-background-radius: 0px;
+}
+.hotdog:hover {
+	-fx-cursor: hand;
+	-fx-background-color: #ddd;
+}
+
+#main-menu {
+	-fx-background-color: #f0f0f0;
+	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 3);
+}
+#main-menu .menu-item {
+	-fx-cursor: hand;
+}
+#main-menu .menu-item:hover {
+	-fx-background-color: #f7f7f7;
+}
+
+
+
+
+/*
+ * debug view
+ */
+ .split-pane {
+	-fx-box-border: transparent;
+}
+.split-pane .split-pane-divider {
+	-fx-background-color: #ccc;
+	-fx-padding: 0 1px;
+}
+
+.table-view {
+	-fx-border-color: transparent;
+	-fx-box-border: #ccc;
+	-fx-padding: 0px;
+}
+.table-view .column-header {
+	-fx-background-color: #f7f7f7;
+}
+.table-row-cell:filled:selected { 
+  -fx-background: -fx-control-inner-background ;
+  -fx-background-color: -fx-table-cell-border-color, -fx-background ;
+  -fx-background-insets: 0, 0 0 1 0 ;
+}
+.table-row-cell:odd:filled:selected {
+  -fx-background: -fx-control-inner-background-alt ;
+}

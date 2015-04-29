@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<!-- -->
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" onMouseClicked="#hideMainMenu" prefHeight="400.0" prefWidth="600.0" stylesheets="@IDE.css" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cs.moose.ui.IDE">
+   <children>
+
+      <!-- title bar -->
+      <AnchorPane prefHeight="42.0" prefWidth="600.0" styleClass="title-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Polygon fx:id="titlebarPolygon" fill="CORAL" layoutX="64.0" layoutY="52.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <points>
+                <Double fx:value="0" />
+                <Double fx:value="0" />
+                
+                <Double fx:value="100" />
+                <Double fx:value="0" />
+                
+                <Double fx:value="125" />
+                <Double fx:value="42" />
+                
+                <Double fx:value="0" />
+                <Double fx:value="42" />
+              </points>
+            </Polygon>
+
+			<!-- hotdog -->
+            <AnchorPane onMouseClicked="#showMainMenu" prefHeight="42.0" prefWidth="75.0" styleClass="hotdog" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Rectangle fill="#333" height="2" layoutX="25.0" layoutY="15" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25" />
+                  <Rectangle fill="#333" height="2" layoutX="25.0" layoutY="21" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25" />
+                  <Rectangle fill="#333" height="2" layoutX="25.0" layoutY="27" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="25" />
+               </children>
+            </AnchorPane>
+
+            <Label fx:id="titlebarText" alignment="CENTER" layoutX="132.0" layoutY="13.0" prefHeight="16.0" prefWidth="336.0" text="Editor" textAlignment="CENTER" textFill="#333333" AnchorPane.leftAnchor="132.0" AnchorPane.rightAnchor="132.0" />
+         </children>
+      </AnchorPane>
+      
+      <!-- main editor -->
+      <WebView id="editor" fx:id="editor" layoutX="33.0" layoutY="113.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0" />
+      
+      <!-- debug view -->
+      <AnchorPane fx:id="debugView" layoutX="7.0" layoutY="42.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
+         <children>
+            <SplitPane dividerPositions="0.75" layoutX="148.0" layoutY="51.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                 <children>
+                                    <TableView fx:id="memoryTable" layoutX="36.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75" text="">
+                                        	<styleClass>
+      											<String fx:value="right" />
+      											<String fx:value="bold" />
+                                        	</styleClass>
+                                        </TableColumn>
+                                        <TableColumn prefWidth="55" text="1" />
+                                        <TableColumn prefWidth="55" text="2" />
+                                        <TableColumn prefWidth="55" text="3" />
+                                        <TableColumn prefWidth="55" text="4" />
+                                        <TableColumn prefWidth="55" text="5" />
+                                        <TableColumn prefWidth="55" text="6" />
+                                        <TableColumn prefWidth="55" text="7" />
+                                        <TableColumn prefWidth="55" text="8" />
+                                        <TableColumn prefWidth="55" text="9" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                 <children>
+                                    <Label layoutX="34.0" layoutY="29.0" text="Watches (TODO)" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <WebView id="debug-editor" fx:id="debugEditor" layoutX="-40.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </children>
+      </AnchorPane>
+      
+      <!-- main menu -->
+      <AnchorPane id="main-menu" fx:id="mainMenu" layoutX="400.0" layoutY="42.0" prefHeight="175.0" prefWidth="250.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
+         <children>
+            <Label contentDisplay="RIGHT" layoutY="6.0" styleClass="menu-item" text="Neu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+               </padding>
+               <graphic>
+                  <Label contentDisplay="RIGHT" prefHeight="16.0" prefWidth="190.0" text="Strg + N" textAlignment="RIGHT" textFill="#a4a4a4">
+                     <padding>
+                        <Insets left="130.0" />
+                     </padding></Label>
+               </graphic>
+            </Label>
+            
+            <Label onMouseClicked="#mainMenuOpenFile" contentDisplay="RIGHT" layoutY="6.0" styleClass="menu-item" text="Datei öffnen" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+               </padding>
+               <graphic>
+                  <Label contentDisplay="RIGHT" prefHeight="16.0" prefWidth="135.0" text="Strg + O" textAlignment="RIGHT" textFill="#a4a4a4">
+                     <padding>
+                        <Insets left="75.0" />
+                     </padding>
+                  </Label>
+               </graphic>
+            </Label>
+            
+            <Label onMouseClicked="#mainMenuSave" contentDisplay="RIGHT" layoutY="6.0" styleClass="menu-item" text="Speichern" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+               </padding>
+               <graphic>
+                  <Label contentDisplay="RIGHT" prefHeight="16.0" prefWidth="150.0" text="Strg + S" textAlignment="RIGHT" textFill="#a4a4a4">
+                     <padding>
+                        <Insets left="90.0" />
+                     </padding>
+                  </Label>
+               </graphic>
+            </Label>
+            
+            <Label onMouseClicked="#mainMenuSaveAs" layoutY="6.0" styleClass="menu-item" text="Speichern unter..." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="105.0">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+               </padding>
+            </Label>
+            
+            <Label contentDisplay="RIGHT" onMouseClicked="#toggleModes" layoutY="6.0" styleClass="menu-item" text="Beenden" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+               </padding>
+               <graphic>
+                  <Label contentDisplay="RIGHT" prefHeight="16.0" prefWidth="155.0" text="Strg + W" textAlignment="RIGHT" textFill="#a4a4a4">
+                     <padding>
+                        <Insets left="95.0" />
+                     </padding>
+                  </Label>
+               </graphic>
+            </Label>
+         </children>
+         </AnchorPane>
+   </children>
+</AnchorPane>

@@ -1,46 +1,28 @@
 package com.cs.moose;
 
-import com.cs.moose.exceptions.*;
-import com.cs.moose.io.*;
-import com.cs.moose.machine.*;
-import com.cs.moose.machine.Compiler;
-import com.cs.moose.types.MachineState;
+import com.cs.moose.ui.IDE;
 
-public class Main {
-	public static void main(String[] args) throws Exception {
-		long start = System.currentTimeMillis();
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage stage) throws Exception {
+		IDE.Stage = stage;
 		
-		String code = File.readAllText("/home/michael/Desktop/moosemachine/test.moose");
-
-		try {
-			Lexer lexer = new Lexer(code);
-
-			Machine machine = Compiler.getMachine(lexer);
-			System.out.println(machine);
-			
-			while (machine.isRunning()) {
-				machine.goForward();
-			}
-			
-			System.out.println(machine);
-			
-			while (machine.goBackwards()) {
-				// go to the beginning
-			}
-			System.out.println(machine);
-
-		} catch (SyntaxException ex) {
-			System.out.println("SyntaxException: " + ex.getMessage() + " in line " + ex.getLine());
-		} catch (JumpPointException ex) {
-			System.out.println("JumpPointException: " + ex.getMessage());
-		} catch (CompilerException ex) {
-			System.out.println("CompilerException: " + ex.getMessage());
-		} catch (Exception ex) {
-			throw ex;
-		}
+		AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("ui/IDE.fxml"));
+		Scene scene = new Scene(root);
+		stage.setMinWidth(600);
+		stage.setMinHeight(400);
 		
-		long end = System.currentTimeMillis();
-		
-		System.out.println("\nTime elapsed: " + (end - start) + "ms");
+		stage.setScene(scene);
+		stage.show();
 	}
 }
