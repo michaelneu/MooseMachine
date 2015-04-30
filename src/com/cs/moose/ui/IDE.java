@@ -3,7 +3,9 @@ package com.cs.moose.ui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.cs.moose.io.File;
 import com.cs.moose.ui.controls.*;
+import com.cs.moose.ui.controls.editor.CodeEditor;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +19,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -28,7 +29,7 @@ public class IDE implements Initializable {
 	private static FileChooser fileChooser;
 	
 	@FXML
-	private WebView editor, debugEditor;
+	private CodeEditor editor, debugEditor;
 	@FXML
 	private AnchorPane debugView;
 	@FXML
@@ -42,19 +43,16 @@ public class IDE implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		editor.setContextMenuEnabled(false);
-		debugEditor.setContextMenuEnabled(false);
-		
-		memoryTable.setSelectionModel(new NullTableViewSelectionModel(memoryTable));
-		
+		// initialize filechooser
 		fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("moose-Dateien", "*.moose");
 		fileChooser.getExtensionFilters().add(filter);
 		filter = new FileChooser.ExtensionFilter("Text-Dateien", "*.txt");
 		fileChooser.getExtensionFilters().add(filter);
-	}
-	
-	private void displayMemory(short[] memory) {
+
+		
+		// initialize tableview
+		memoryTable.setSelectionModel(new NullTableViewSelectionModel(memoryTable));
 		Object[] columns = memoryTable.getColumns().toArray();
 		
 		for (int i = 0; i < columns.length; i++) {
@@ -63,7 +61,10 @@ public class IDE implements Initializable {
 			column.setSortable(false);
 			column.setCellValueFactory(new PropertyValueFactory<MemoryTableRow, String>("column" + i));
 		}
-		
+	}
+	
+	private void displayMemory(short[] memory) {
+
 		ObservableList<MemoryTableRow> data = FXCollections.observableArrayList();
 		for (MemoryTableRow row : MemoryTableRow.getRows(memory)) {
 			data.add(row);
@@ -72,12 +73,14 @@ public class IDE implements Initializable {
 		memoryTable.setItems(data);
 	}
 	
+	private String titlebarTextValue;
 	@FXML
 	private void toggleModes(MouseEvent event) {
 		if (!editor.isVisible()) {
-			titlebarText.setText("Editor");
+			titlebarText.setText(titlebarTextValue);
 			titlebarPolygon.setFill(Color.CORAL);
 		} else { 
+			titlebarTextValue = titlebarText.getText();
 			titlebarText.setText("Debug");
 			titlebarPolygon.setFill(Color.DARKGRAY);
 		}
@@ -85,8 +88,6 @@ public class IDE implements Initializable {
 		editor.setVisible(!editor.isVisible());
 		debugView.setVisible(!debugView.isVisible());
 	}
-	
-	
 	
 	@FXML
 	private void hideMainMenu(MouseEvent event) {
@@ -106,7 +107,16 @@ public class IDE implements Initializable {
 		java.io.File file = fileChooser.showOpenDialog(Stage);
 		
 		if (file != null) {
-			titlebarText.setText(file.getAbsolutePath());
+			String path = file.getAbsolutePath();
+			
+			try {
+				String code = File.readAllText(path);
+				
+				editor.setCode(code);
+				titlebarText.setText(path);
+			} catch (Exception ex) {
+				// display messagebox
+			}
 		}
 	}
 	@FXML
@@ -114,7 +124,14 @@ public class IDE implements Initializable {
 		if (titlebarText.getText().equals("Editor")) {
 			this.mainMenuSaveAs(event);
 		} else {
-			
+			try {
+				String filename = titlebarText.getText();
+				String code = editor.getCode();
+				
+				File.writeAllText(filename, code);
+			} catch (Exception ex) {
+				// display messagebox
+			}
 		}
 	}
 	@FXML
@@ -123,9 +140,13 @@ public class IDE implements Initializable {
 		
 		if (file != null) {
 			try {
-				com.cs.moose.io.File.writeAllText(file.getAbsolutePath(), "");
+				String path = file.getAbsolutePath(),
+						code = editor.getCode();
+				
+				File.writeAllText(path, code);
+				titlebarText.setText(path);
 			} catch (Exception ex) {
-				Dialog.showError("Fehler beim Speichern der Datei", "Fehler");
+				// display messagebox
 			}
 		}
 	}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+		<script src="http://codemirror.net/lib/codemirror.js"></script>
+		
+		<script src="http://codemirror.net/addon/display/fullscreen.js"></script>
+		<link rel="stylesheet" href="http://codemirror.net/addon/display/fullscreen.css">
+		
+		<script src="http://codemirror.net/addon/selection/active-line.js"></script>
+	</head>
+	<body>
+		<textarea id="code" name="code"${autofocus}>${code}</textarea>
+		
+		<script type="text/javascript">
+			var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+				${highlight-line}
+				lineNumbers: true
+			});
+			
+			editor.setOption("fullScreen", true);
+		</script>
+	</body>
+</html>
