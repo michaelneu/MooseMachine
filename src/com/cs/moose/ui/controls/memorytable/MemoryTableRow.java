@@ -1,4 +1,4 @@
-package com.cs.moose.ui.controls;
+package com.cs.moose.ui.controls.memorytable;
 
 public class MemoryTableRow {
 	private final short[] values;

@@ -14,7 +14,9 @@
 .right {
 	-fx-text-alignment: right;
 }
-
+.root {
+	-fx-selection-bar: transparent;
+}
 
 
 /*
@@ -65,22 +67,4 @@
 .split-pane .split-pane-divider {
 	-fx-background-color: #ccc;
 	-fx-padding: 0 1px;
-}
-
-.table-view {
-	-fx-border-color: transparent;
-	-fx-box-border: #ccc;
-	-fx-padding: 0px;
-}
-.table-view .column-header {
-	-fx-background-color: #f7f7f7;
-}
-.table-row-cell:filled:selected { 
-	-fx-background: -fx-control-inner-background;
-	-fx-background-color: -fx-table-cell-border-color, -fx-background;
-	-fx-background-insets: 0, 0 0 1 0;
-	-fx-border-style: none;
-}
-.table-row-cell:odd:filled:selected {
-	-fx-background: -fx-control-inner-background-alt;
 }

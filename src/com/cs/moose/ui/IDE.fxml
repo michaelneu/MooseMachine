@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import com.cs.moose.ui.controls.editor.CodeEditor?>
+<?import com.cs.moose.ui.controls.memorytable.MemoryTable?>
 
 <!-- -->
 
@@ -84,26 +85,7 @@
 									<items>
 										<AnchorPane minHeight="0" minWidth="0" prefHeight="100" prefWidth="160">
 											<children>
-												<TableView fx:id="memoryTable" layoutX="36" layoutY="14" prefHeight="200" prefWidth="200" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-													<columns>
-														<TableColumn prefWidth="75" text="">
-															<styleClass>
-																<String fx:value="right" />
-																<String fx:value="bold" />
-															</styleClass>
-														</TableColumn>
-
-														<TableColumn prefWidth="55" text="1" />
-														<TableColumn prefWidth="55" text="2" />
-														<TableColumn prefWidth="55" text="3" />
-														<TableColumn prefWidth="55" text="4" />
-														<TableColumn prefWidth="55" text="5" />
-														<TableColumn prefWidth="55" text="6" />
-														<TableColumn prefWidth="55" text="7" />
-														<TableColumn prefWidth="55" text="8" />
-														<TableColumn prefWidth="55" text="9" />
-													</columns>
-												</TableView>
+												<MemoryTable fx:id="memoryTable" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
 											</children>
 										</AnchorPane>
 

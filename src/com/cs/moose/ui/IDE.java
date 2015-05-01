@@ -12,27 +12,21 @@ import com.cs.moose.locale.*;
 import com.cs.moose.machine.Compiler;
 import com.cs.moose.machine.Lexer;
 import com.cs.moose.machine.Machine;
-import com.cs.moose.ui.controls.*;
+import com.cs.moose.ui.controls.Dialog;
 import com.cs.moose.ui.controls.editor.CodeEditor;
+import com.cs.moose.ui.controls.memorytable.MemoryTable;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class IDE implements Initializable {
 	// reference required for filechooser
 	public static Stage Stage;
@@ -51,7 +45,7 @@ public class IDE implements Initializable {
 	@FXML
 	private Polygon titlebarPolygon, iconPlay;
 	@FXML
-	private TableView memoryTable;
+	private MemoryTable memoryTable;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -61,33 +55,7 @@ public class IDE implements Initializable {
 		fileChooser.getExtensionFilters().add(filter);
 		filter = new FileChooser.ExtensionFilter("Text-" + locale.getFiles(), "*.txt");
 		fileChooser.getExtensionFilters().add(filter);
-
-		
-		// initialize tableview
-		memoryTable.setSelectionModel(new NullTableViewSelectionModel(memoryTable));
-		Object[] columns = memoryTable.getColumns().toArray();
-		
-		for (int i = 0; i < columns.length; i++) {
-			TableColumn column = (TableColumn)columns[i];
-			
-			column.setSortable(false);
-			column.setCellValueFactory(new PropertyValueFactory<MemoryTableRow, String>("column" + i));
-		}
-		
-		
-		// initially display blank memory to decrease load times on first compilation
-		displayMemory(new short[65536]);
 	}
-	
-	private void displayMemory(short[] memory) {
-		ObservableList<MemoryTableRow> data = FXCollections.observableArrayList();
-		for (MemoryTableRow row : MemoryTableRow.getRows(memory)) {
-			data.add(row);
-		}
-		
-		memoryTable.setItems(data);
-	}
-	
 	
 	@FXML
 	private void toggleModes(MouseEvent event) {
@@ -105,7 +73,7 @@ public class IDE implements Initializable {
 				Lexer lexer = new Lexer(code);
 				currentMachine = Compiler.getMachine(lexer);
 				
-				displayMemory(currentMachine.toMachineState().getMemory());
+				memoryTable.setMemory(currentMachine.toMachineState().getMemory());
 				
 				debugEditor.setCode(code);
 				debugEditor.highlightLine(1);

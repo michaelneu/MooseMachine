@@ -1,4 +1,4 @@
-package com.cs.moose.ui.controls;
+package com.cs.moose.ui.controls.memorytable;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,7 +6,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class NullTableViewSelectionModel extends TableView.TableViewSelectionModel {
+class NullTableViewSelectionModel extends TableView.TableViewSelectionModel {
 
 	public NullTableViewSelectionModel(TableView tableView) {
 		super(tableView);
