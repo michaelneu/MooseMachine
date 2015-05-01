@@ -8,6 +8,8 @@ import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -41,9 +43,11 @@ public class CodeEditor extends AnchorPane implements Initializable {
 		editor.setContextMenuEnabled(false);
 		engine = editor.getEngine();
 		
+		
 		setCode("");
 	}
 	
+	@SuppressWarnings("resource")
 	private static String getEditorTemplate() {
 		InputStream indexStream = CodeEditor.class.getResourceAsStream("index.html");
 		Scanner reader = new Scanner(indexStream).useDelimiter("\\A");
@@ -52,6 +56,24 @@ public class CodeEditor extends AnchorPane implements Initializable {
 			return reader.next();
 		} else {
 			return "<h1>Fehler beim Laden des Editors</h1>";
+		}
+	}
+	
+	@FXML
+	private void keyPressHandler(KeyEvent event) {
+		final double scaleFactor = 0.1;
+		
+		if (event.isControlDown()) {
+			double currentScale = editor.getZoom();
+			KeyCode code = event.getCode();
+			
+			if (code == KeyCode.PLUS) {
+				currentScale += scaleFactor;
+				editor.setZoom(currentScale);
+			} else if (code == KeyCode.MINUS && currentScale > 0) {
+				currentScale -= scaleFactor;
+				editor.setZoom(currentScale);
+			}
 		}
 	}
 

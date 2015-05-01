@@ -3,6 +3,7 @@ package com.cs.moose.ui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.cs.moose.Main;
 import com.cs.moose.io.File;
 import com.cs.moose.ui.controls.*;
 import com.cs.moose.ui.controls.editor.CodeEditor;
@@ -15,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -64,7 +66,6 @@ public class IDE implements Initializable {
 	}
 	
 	private void displayMemory(short[] memory) {
-
 		ObservableList<MemoryTableRow> data = FXCollections.observableArrayList();
 		for (MemoryTableRow row : MemoryTableRow.getRows(memory)) {
 			data.add(row);
@@ -101,6 +102,10 @@ public class IDE implements Initializable {
 			mainMenu.setVisible(true);
 			event.consume();
 		}
+	}
+	@FXML
+	private void mainMenuNew(MouseEvent event) {
+		Main.launchNew();
 	}
 	@FXML
 	private void mainMenuOpenFile(MouseEvent event) {
@@ -147,6 +152,40 @@ public class IDE implements Initializable {
 				titlebarText.setText(path);
 			} catch (Exception ex) {
 				// display messagebox
+			}
+		}
+	}
+	@FXML
+	private void mainMenuExit(MouseEvent event) {
+		System.exit(0);
+	}
+	
+	@FXML
+	private void keyTypedHandler(KeyEvent event) {
+		if (event.isControlDown()) {
+			switch (event.getCharacter().charAt(0)) {
+				case 14: // ctrl + n
+					mainMenuNew(null);
+					break;
+					
+				case 15: // ctrl + o
+					mainMenuOpenFile(null);
+					break;
+					
+				case 19:  // ctrl + s
+					mainMenuSave(null);
+					break;
+					
+				case 83: // ctrl + shift + s
+					mainMenuSaveAs(null);
+					break;
+					
+				case 23: // ctrl + w
+					mainMenuExit(null);
+					break;
+					
+				default: 
+					break;
 			}
 		}
 	}

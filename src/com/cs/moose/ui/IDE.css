@@ -31,7 +31,9 @@
 	-fx-background-color: red !important;
 }
 
-
+#titlebarPolygon:hover {
+	-fx-cursor: hand;
+}
 
 
 /*

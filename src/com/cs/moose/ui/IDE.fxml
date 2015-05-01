@@ -15,13 +15,13 @@
 
 <!-- -->
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" onMouseClicked="#hideMainMenu" prefHeight="400.0" prefWidth="600.0" stylesheets="@IDE.css" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cs.moose.ui.IDE">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" onMouseClicked="#hideMainMenu" prefHeight="400.0" prefWidth="600.0" stylesheets="@IDE.css" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cs.moose.ui.IDE" onKeyTyped="#keyTypedHandler">
    <children>
 
       <!-- title bar -->
       <AnchorPane prefHeight="42.0" prefWidth="600.0" styleClass="title-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Polygon fx:id="titlebarPolygon" fill="CORAL" layoutX="64.0" layoutY="52.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Polygon fx:id="titlebarPolygon" id="titlebarPolygon" onMouseClicked="#toggleModes" fill="CORAL" layoutX="64.0" layoutY="52.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
               <points>
                 <Double fx:value="0" />
                 <Double fx:value="0" />
@@ -35,6 +35,19 @@
                 <Double fx:value="0" />
                 <Double fx:value="42" />
               </points>
+            </Polygon>
+            
+            <Polygon fill="WHITE" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="45">
+            	<points>
+            		<Double fx:value="-10" />
+            		<Double fx:value="-11" />
+            		
+            		<Double fx:value="10" />
+            		<Double fx:value="0" />
+            		
+            		<Double fx:value="-10" />
+            		<Double fx:value="11" />
+            	</points>
             </Polygon>
 
 			<!-- hotdog -->
@@ -109,7 +122,7 @@
       <!-- main menu -->
       <AnchorPane id="main-menu" fx:id="mainMenu" layoutX="400.0" layoutY="42.0" prefHeight="175.0" prefWidth="250.0" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
          <children>
-            <Label contentDisplay="RIGHT" layoutY="6.0" styleClass="menu-item" text="Neu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label onMouseClicked="#mainMenuNew" contentDisplay="RIGHT" layoutY="6.0" styleClass="menu-item" text="Neu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <padding>
                   <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
                </padding>
@@ -153,7 +166,7 @@
                </padding>
             </Label>
             
-            <Label contentDisplay="RIGHT" onMouseClicked="#toggleModes" layoutY="6.0" styleClass="menu-item" text="Beenden" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0">
+            <Label onMouseClicked="#mainMenuExit" contentDisplay="RIGHT" layoutY="6.0" styleClass="menu-item" text="Beenden" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="140.0">
                <padding>
                   <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
                </padding>
