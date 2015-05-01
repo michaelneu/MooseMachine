@@ -6,4 +6,8 @@ public class Dialog {
 	public static void showError(String message, String title) {
 		JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
 	}
+	
+	public static boolean confirm(String message, String title) {
+		return true;
+	}
 }

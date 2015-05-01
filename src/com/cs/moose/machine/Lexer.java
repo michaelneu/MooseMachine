@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Lexer {
-	private static final String regexComments = "\\#(.*)",
+	private static final String regexComments = "(\\#|\\/\\/)(.*)",
 			regexJump = "^([A-Za-z0-9\\-]+\\:\\s*)",
 			regexCommand = "([A-Za-z]+)",
 			regexParameter = "\\s((\\-?)\\d+|(\\-)?[A-Za-z0-9\\-]+)",

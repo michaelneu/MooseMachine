@@ -1,0 +1,19 @@
+// Dieses Programm zählt bis zum maximalen Wert einer Zahl
+// und speichert diesen Wert in Zelle 100
+
+LOADI 1			// Wert 1 in den Akkumulator laden
+STORE 100		// Anfangswert in Zelle 100 speichern
+
+loop: 			// die benötigte Schleife
+	ADDI 1		// Inkrementieren des Akkumulators um 1
+	STORE 100	// Abspeichern des Zwischenergebnisses
+	CMPI 0		// mit der Zahl 0 Vergleichen
+
+	JGT loop	// solange zu [loop] springen, bis der 
+				// Akkumulator < 0 ist (Overflow)
+
+LOAD 100		// Wert aus Zelle 100 laden
+SUBI 1			// Dekrementieren des Akkumulators um 1 
+STORE 100		// --> Abspeichern des Wertes in Zelle 100
+
+HOLD			// die Maschine anhalten

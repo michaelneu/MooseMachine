@@ -21,6 +21,7 @@ public class CodeEditor extends AnchorPane implements Initializable {
 	private WebView editor;
 	private WebEngine engine;
 	
+	private boolean codeEdited;
 	
 	public CodeEditor() {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CodeEditor.fxml"));
@@ -74,7 +75,16 @@ public class CodeEditor extends AnchorPane implements Initializable {
 				currentScale -= scaleFactor;
 				editor.setZoom(currentScale);
 			}
+		} else {
+			codeEdited = true;
 		}
+	}
+	
+	public boolean getCodeEdited() {
+		boolean temp = this.codeEdited;
+		this.codeEdited = false;
+		
+		return temp;
 	}
 
 	private boolean autofocus;

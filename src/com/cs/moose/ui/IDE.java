@@ -4,7 +4,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.cs.moose.Main;
+import com.cs.moose.exceptions.CompilerException;
+import com.cs.moose.exceptions.JumpPointException;
+import com.cs.moose.exceptions.SyntaxException;
 import com.cs.moose.io.File;
+import com.cs.moose.locale.*;
+import com.cs.moose.machine.Compiler;
+import com.cs.moose.machine.Lexer;
+import com.cs.moose.machine.Machine;
 import com.cs.moose.ui.controls.*;
 import com.cs.moose.ui.controls.editor.CodeEditor;
 
@@ -21,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -29,27 +37,29 @@ public class IDE implements Initializable {
 	// reference required for filechooser
 	public static Stage Stage;
 	private static FileChooser fileChooser;
+	private static ILocale locale = ILocale.getLocale();
+	
+	private String currentFile;
+	private Machine currentMachine;
 	
 	@FXML
 	private CodeEditor editor, debugEditor;
 	@FXML
-	private AnchorPane debugView;
+	private AnchorPane debugView, mainMenu, iconPause;
 	@FXML
 	private Label titlebarText;
 	@FXML
-	private Polygon titlebarPolygon;
+	private Polygon titlebarPolygon, iconPlay;
 	@FXML
 	private TableView memoryTable;
-	@FXML 
-	private AnchorPane mainMenu;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// initialize filechooser
+		// initialize filechooser (set its filters)
 		fileChooser = new FileChooser();
-		FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("moose-Dateien", "*.moose");
+		FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("moose-" + locale.getFiles(), "*.moose");
 		fileChooser.getExtensionFilters().add(filter);
-		filter = new FileChooser.ExtensionFilter("Text-Dateien", "*.txt");
+		filter = new FileChooser.ExtensionFilter("Text-" + locale.getFiles(), "*.txt");
 		fileChooser.getExtensionFilters().add(filter);
 
 		
@@ -63,6 +73,10 @@ public class IDE implements Initializable {
 			column.setSortable(false);
 			column.setCellValueFactory(new PropertyValueFactory<MemoryTableRow, String>("column" + i));
 		}
+		
+		
+		// initially display blank memory to decrease load times on first compilation
+		displayMemory(new short[65536]);
 	}
 	
 	private void displayMemory(short[] memory) {
@@ -74,20 +88,63 @@ public class IDE implements Initializable {
 		memoryTable.setItems(data);
 	}
 	
-	private String titlebarTextValue;
+	
 	@FXML
 	private void toggleModes(MouseEvent event) {
-		if (!editor.isVisible()) {
-			titlebarText.setText(titlebarTextValue);
+		// check for code editing beforehand
+		if (currentFile == null || editor.getCodeEdited()) {
+			// prompt user
+			if (!Dialog.confirm(locale.getCompileFileNotSavedWarning(), locale.getCodeNotSaved())) {
+				return;
+			}
+		}
+		
+		if (currentMachine == null) {
+			String code = editor.getCode();
+			try {
+				Lexer lexer = new Lexer(code);
+				currentMachine = Compiler.getMachine(lexer);
+				
+				displayMemory(currentMachine.toMachineState().getMemory());
+				
+				debugEditor.setCode(code);
+				debugEditor.highlightLine(1);
+				
+				toggleView();
+			} catch (SyntaxException ex) {
+				ex.printStackTrace();
+				Dialog.showError(locale.getSyntaxErrorInLine(ex.getLine() + 1), locale.getCompilerError());
+			} catch (JumpPointException ex) {
+				Dialog.showError(locale.getCompilerJumpPointError(), locale.getCompilerError());
+			} catch (CompilerException ex) {
+				Dialog.showError(locale.getCompilerUnknownError(), locale.getCompilerError());
+			}
+		} else {
+			currentMachine = null;
+			
+			toggleView();
+		}
+	}
+	
+	private void toggleView() {
+		if (currentMachine == null) {
+			if (currentFile == null) {
+				titlebarText.setText("Editor");
+			} else {
+				titlebarText.setText(currentFile);
+			}
+			
 			titlebarPolygon.setFill(Color.CORAL);
-		} else { 
-			titlebarTextValue = titlebarText.getText();
+		} else {
 			titlebarText.setText("Debug");
 			titlebarPolygon.setFill(Color.DARKGRAY);
 		}
 		
 		editor.setVisible(!editor.isVisible());
 		debugView.setVisible(!debugView.isVisible());
+
+		iconPause.setVisible(!iconPause.isVisible());
+		iconPlay.setVisible(!iconPlay.isVisible());
 	}
 	
 	@FXML
@@ -109,31 +166,37 @@ public class IDE implements Initializable {
 	}
 	@FXML
 	private void mainMenuOpenFile(MouseEvent event) {
-		java.io.File file = fileChooser.showOpenDialog(Stage);
-		
-		if (file != null) {
-			String path = file.getAbsolutePath();
+		boolean edited = editor.getCodeEdited();
+		if (!edited || (edited && Dialog.confirm(locale.getOpenFileNotSavedWarning(), locale.getCodeNotSaved()))) {
+			java.io.File file = fileChooser.showOpenDialog(Stage);
 			
-			try {
-				String code = File.readAllText(path);
+			if (file != null) {
+				String path = file.getAbsolutePath();
 				
-				editor.setCode(code);
-				titlebarText.setText(path);
-			} catch (Exception ex) {
-				// display messagebox
+				try {
+					String code = File.readAllText(path);
+					
+					editor.setCode(code);
+					titlebarText.setText(path);
+					currentFile = path;
+					
+					editor.getCodeEdited();
+				} catch (Exception ex) {
+					// display messagebox
+				}
 			}
 		}
 	}
 	@FXML
 	private void mainMenuSave(MouseEvent event) {
-		if (titlebarText.getText().equals("Editor")) {
+		if (currentFile == null) {
 			this.mainMenuSaveAs(event);
 		} else {
 			try {
-				String filename = titlebarText.getText();
 				String code = editor.getCode();
 				
-				File.writeAllText(filename, code);
+				File.writeAllText(currentFile, code);
+				editor.getCodeEdited();
 			} catch (Exception ex) {
 				// display messagebox
 			}
@@ -150,6 +213,9 @@ public class IDE implements Initializable {
 				
 				File.writeAllText(path, code);
 				titlebarText.setText(path);
+				currentFile = path;
+				
+				editor.getCodeEdited();
 			} catch (Exception ex) {
 				// display messagebox
 			}
@@ -157,7 +223,11 @@ public class IDE implements Initializable {
 	}
 	@FXML
 	private void mainMenuExit(MouseEvent event) {
-		System.exit(0);
+		boolean edited = editor.getCodeEdited();
+		
+		if (!edited || (edited && Dialog.confirm("Code nicht gespeichert. \nTrotzdem beenden?", "Code nicht gespeichert"))) {
+			System.exit(0);
+		}
 	}
 	
 	@FXML
