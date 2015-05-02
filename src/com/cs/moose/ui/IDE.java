@@ -24,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -39,13 +40,16 @@ public class IDE implements Initializable {
 	@FXML
 	private CodeEditor editor;
 	@FXML
-	private AnchorPane mainMenu, iconPause;
+	private AnchorPane mainMenu, debugControls;
 	@FXML
-	private Label titlebarText;
+	private Rectangle iconStop;
+	@FXML
+	private Label titlebarTextEditor, titlebarTextDebug;
 	@FXML
 	private Polygon titlebarPolygon, iconPlay;
 	@FXML
 	private DebugView debug;
+	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -92,24 +96,40 @@ public class IDE implements Initializable {
 	
 	private void toggleView() {
 		if (currentMachine == null) {
-			if (currentFile == null) {
-				titlebarText.setText("Editor");
-			} else {
-				titlebarText.setText(currentFile);
-			}
 			
 			titlebarPolygon.setFill(Color.CORAL);
 		} else {
-			titlebarText.setText("Debug");
 			titlebarPolygon.setFill(Color.DARKGRAY);
 		}
+
+		titlebarTextEditor.setVisible(!titlebarTextEditor.isVisible());
+		titlebarTextDebug.setVisible(!titlebarTextDebug.isVisible());
 		
 		editor.setVisible(!editor.isVisible());
 		debug.setVisible(!debug.isVisible());
+		debugControls.setVisible(!debugControls.isVisible());
 
-		iconPause.setVisible(!iconPause.isVisible());
+		iconStop.setVisible(!iconStop.isVisible());
 		iconPlay.setVisible(!iconPlay.isVisible());
 	}
+
+	
+	@FXML
+	private void debugGoForward(MouseEvent event) {
+		debug.goForwards();
+		event.consume();
+	}
+	@FXML
+	private void debugPlayPause(MouseEvent event) {
+		
+		event.consume();
+	}
+	@FXML
+	private void debugGoBack(MouseEvent event) {
+		debug.goBackwards();
+		event.consume();
+	}
+	
 	
 	@FXML
 	private void hideMainMenu(MouseEvent event) {
@@ -141,7 +161,7 @@ public class IDE implements Initializable {
 					String code = File.readAllText(path);
 					
 					editor.setCode(code);
-					titlebarText.setText(path);
+					titlebarTextEditor.setText(path);
 					currentFile = path;
 					
 					editor.getCodeEdited();
@@ -176,7 +196,7 @@ public class IDE implements Initializable {
 						code = editor.getCode();
 				
 				File.writeAllText(path, code);
-				titlebarText.setText(path);
+				titlebarTextEditor.setText(path);
 				currentFile = path;
 				
 				editor.getCodeEdited();

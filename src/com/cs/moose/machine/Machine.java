@@ -38,7 +38,7 @@ public class Machine {
 				// run command
 				runCommand(command, memoryParameter);
 			} catch (IndexOutOfBoundsException ex) { // handle outside of memory exceptions
-				throw new MachineException(null, "Invalid memory address ");
+				throw new MachineException(null, "Invalid memory address");
 			}
 		}
 	}
@@ -310,6 +310,14 @@ public class Machine {
 	
 	public boolean isRunning() {
 		return !this.flagHold;
+	}
+	
+	public short[] getWorkingMemory() {
+		return this.memory;
+	}
+	
+	public int getNextCommand() {
+		return this.nextCommand;
 	}
 	
 	@Override

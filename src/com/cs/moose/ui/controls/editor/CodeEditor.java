@@ -126,12 +126,27 @@ public class CodeEditor extends UserControl {
 		
 		reloadEditor();
 	}
+	
+	private int initialLine;
+	public int getInitialLine() {
+		return this.initialLine;
+	}
+	public void setInitialLine(int line) {
+		this.initialLine = line;
+	}
 
 	
 	public void setCode(String code) {
 		String content = editorTemplate.replace("${autofocus}", this.autofocus ? "autofocus: true," : "");
 		content = content.replace("${highlight-line}", this.lineHighlight ? "styleActiveLine: true," : "");
 		content = content.replace("${readonly}", this.readonly ? "readOnly: true, cursorBlinkRate: -1," : "");
+		
+		if (this.initialLine > 0) {
+			content = content.replace("${initial-line}", "editor.setCursor({line: " + (this.initialLine - 1) + ", ch:0});");
+		} else {
+			content = content.replace("${initial-line}", "");
+		}
+		
 		content = content.replace("${code}", code);
 		
 		this.engine.loadContent(content);

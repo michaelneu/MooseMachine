@@ -26,8 +26,7 @@
 	-fx-background-color: #f7f7f7;
 }
 
-.title-bar .icon,
-#titlebarPolygon:hover {
+.title-bar .icon:hover {
 	-fx-cursor: hand;
 }
 

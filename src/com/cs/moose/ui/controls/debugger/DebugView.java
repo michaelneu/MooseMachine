@@ -5,8 +5,9 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 
+import com.cs.moose.exceptions.MachineException;
+import com.cs.moose.machine.Lexer;
 import com.cs.moose.machine.Machine;
-import com.cs.moose.types.MachineState;
 import com.cs.moose.ui.controls.UserControl;
 import com.cs.moose.ui.controls.editor.CodeEditor;
 import com.cs.moose.ui.controls.memorytable.MemoryTable;
@@ -16,6 +17,9 @@ public class DebugView extends UserControl {
 	private MemoryTable memoryTable;
 	@FXML
 	private CodeEditor editor;
+	
+	private Machine machine;
+	private String[] strippedCode;
 	
 	public DebugView() {
 		super("DebugView.fxml");
@@ -27,10 +31,66 @@ public class DebugView extends UserControl {
 	}
 	
 	public void startDebug(String code, Machine machine) {
-		editor.setCode(code);
-		editor.highlightLine(1);
+		this.machine = machine;
+		this.strippedCode = Lexer.stripNonCommands(code).split("\n");
 		
-		MachineState state = machine.toMachineState();
-		memoryTable.setMemory(state.getMemory());
+		int initialLine = findCurrentLine();
+		editor.setInitialLine(initialLine);
+		editor.setCode(code);
+	}
+	
+	private void updateDebugger() {
+		this.memoryTable.setMemory(machine.getWorkingMemory());
+		
+		int currentLine = findCurrentLine();
+		editor.highlightLine(currentLine);
+	}
+	
+	private int findCurrentLine() {
+		int targetLine = machine.getNextCommand() / 2,
+				whitespaces = 0,
+				nonWhitespaces = 0;
+		
+		for (String line : strippedCode) {
+			if (line.length() == 0) {
+				whitespaces++;
+			} else {
+				if (nonWhitespaces == targetLine) {
+					break;
+				} else {
+					nonWhitespaces++;
+				}
+			}
+		}
+		
+		return whitespaces + nonWhitespaces + 1;
+	}
+	
+	
+	public void goForwards() {
+		try {
+			this.machine.goForward();
+			updateDebugger();
+		} catch (MachineException ex) {
+			// display error
+		}
+	}
+	
+	public void runCompleteProgram() {
+		
+	}
+	
+	public boolean goBackwards() {
+		boolean successfull = this.machine.goBackwards();
+		
+		if (successfull) {
+			updateDebugger();
+		}
+		
+		return successfull;
+	}
+	
+	public boolean canGoForwards() {
+		return this.machine.isRunning();
 	}
 }
