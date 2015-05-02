@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import com.cs.moose.ui.controls.editor.CodeEditor?>
 <?import com.cs.moose.ui.controls.memorytable.MemoryTable?>
+<?import com.cs.moose.ui.controls.debugger.DebugView?>
 
 <!-- -->
 
@@ -20,7 +21,7 @@
 	<children>
 
 		<!-- title bar -->
-		<AnchorPane prefHeight="42" prefWidth="600" styleClass="title-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+		<AnchorPane prefHeight="42" styleClass="title-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 			<children>
 				<Polygon fx:id="titlebarPolygon" id="titlebarPolygon" onMouseClicked="#toggleModes" fill="CORAL" layoutX="64" layoutY="52" stroke="BLACK" strokeType="INSIDE" strokeWidth="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0">
 					<points>
@@ -67,52 +68,18 @@
 					 </children>
 				</AnchorPane>
 
-				<Label fx:id="titlebarText" alignment="CENTER" layoutX="132" layoutY="13" prefHeight="16" prefWidth="336" text="Editor" textAlignment="CENTER" textFill="#333333" AnchorPane.leftAnchor="132" AnchorPane.rightAnchor="132" />
+				<Label fx:id="titlebarText" alignment="CENTER" layoutX="132" layoutY="13" prefHeight="16" text="Editor" textAlignment="CENTER" textFill="#333333" AnchorPane.leftAnchor="132" AnchorPane.rightAnchor="132" />
 			</children>
 		</AnchorPane>
 				
 		<!-- main editor -->
-		<CodeEditor autofocus="true" fx:id="editor" layoutX="33" layoutY="113" prefHeight="200" prefWidth="200" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42" />
+		<CodeEditor autofocus="true" fx:id="editor" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42" />
 				
 		<!-- debug view -->
-		<AnchorPane fx:id="debugView" layoutX="7" layoutY="42" prefHeight="200" prefWidth="200" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42">
-			<children>
-				<SplitPane dividerPositions="0.75" layoutX="148" layoutY="51" prefHeight="160" prefWidth="200" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-					<items>
-						<AnchorPane minHeight="0" minWidth="0" prefHeight="160" prefWidth="100">
-							 <children>
-								<SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200" prefWidth="160" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-									<items>
-										<AnchorPane minHeight="0" minWidth="0" prefHeight="100" prefWidth="160">
-											<children>
-												<MemoryTable fx:id="memoryTable" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
-											</children>
-										</AnchorPane>
-
-										<AnchorPane minHeight="0" minWidth="0" prefHeight="100" prefWidth="160">
-											<children>
-												<Label layoutX="34" layoutY="29" text="Watches (TODO)" />
-											</children>
-										</AnchorPane>
-									</items>
-								</SplitPane>
-							</children>
-						</AnchorPane>
-
-						<AnchorPane minHeight="0" minWidth="0" prefHeight="160" prefWidth="100">
-							<children>
-							 
-								<!-- debug editor -->
-								<CodeEditor fx:id="debugEditor" disable="true" layoutX="-40" layoutY="14" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
-							</children>
-						</AnchorPane>
-					</items>
-				</SplitPane>
-			</children>
-		</AnchorPane>
-				
-				<!-- main menu -->
-		<AnchorPane id="main-menu" fx:id="mainMenu" layoutX="400" layoutY="42" prefHeight="175" prefWidth="250" visible="false" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42">
+		<DebugView fx:id="debug" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42" />
+		
+		<!-- main menu -->
+		<AnchorPane id="main-menu" fx:id="mainMenu" prefHeight="175" prefWidth="250" visible="false" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42">
 			<children>
 				<Label onMouseClicked="#mainMenuNew" contentDisplay="RIGHT" layoutY="6" styleClass="menu-item" text="Neu" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 					<padding>

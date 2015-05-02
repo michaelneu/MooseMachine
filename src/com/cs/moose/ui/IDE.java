@@ -13,8 +13,8 @@ import com.cs.moose.machine.Compiler;
 import com.cs.moose.machine.Lexer;
 import com.cs.moose.machine.Machine;
 import com.cs.moose.ui.controls.Dialog;
+import com.cs.moose.ui.controls.debugger.DebugView;
 import com.cs.moose.ui.controls.editor.CodeEditor;
-import com.cs.moose.ui.controls.memorytable.MemoryTable;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,21 +31,21 @@ public class IDE implements Initializable {
 	// reference required for filechooser
 	public static Stage Stage;
 	private static FileChooser fileChooser;
-	private static ILocale locale = ILocale.getLocale();
 	
+	private static ILocale locale = ILocale.getLocale();
 	private String currentFile;
 	private Machine currentMachine;
 	
 	@FXML
-	private CodeEditor editor, debugEditor;
+	private CodeEditor editor;
 	@FXML
-	private AnchorPane debugView, mainMenu, iconPause;
+	private AnchorPane mainMenu, iconPause;
 	@FXML
 	private Label titlebarText;
 	@FXML
 	private Polygon titlebarPolygon, iconPlay;
 	@FXML
-	private MemoryTable memoryTable;
+	private DebugView debug;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -73,11 +73,7 @@ public class IDE implements Initializable {
 				Lexer lexer = new Lexer(code);
 				currentMachine = Compiler.getMachine(lexer);
 				
-				memoryTable.setMemory(currentMachine.toMachineState().getMemory());
-				
-				debugEditor.setCode(code);
-				debugEditor.highlightLine(1);
-				
+				debug.startDebug(code,  currentMachine);
 				toggleView();
 			} catch (SyntaxException ex) {
 				ex.printStackTrace();
@@ -109,7 +105,7 @@ public class IDE implements Initializable {
 		}
 		
 		editor.setVisible(!editor.isVisible());
-		debugView.setVisible(!debugView.isVisible());
+		debug.setVisible(!debug.isVisible());
 
 		iconPause.setVisible(!iconPause.isVisible());
 		iconPlay.setVisible(!iconPlay.isVisible());

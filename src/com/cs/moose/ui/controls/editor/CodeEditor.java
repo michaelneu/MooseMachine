@@ -5,16 +5,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import com.cs.moose.ui.controls.UserControl;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-public class CodeEditor extends AnchorPane implements Initializable {
+public class CodeEditor extends UserControl {
 	private static String editorTemplate;
 	
 	@FXML
@@ -24,17 +24,20 @@ public class CodeEditor extends AnchorPane implements Initializable {
 	private boolean codeEdited;
 	
 	public CodeEditor() {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CodeEditor.fxml"));
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
-		
-		try {
-			fxmlLoader.load();
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
+		super("CodeEditor.fxml");
 	}
 
+	private void reloadEditor() {
+		String code = "";
+		
+		try {
+			code = getCode();
+		} catch (Exception ex) {
+			
+		}
+		
+		setCode(code);
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		if (editorTemplate == null) {
@@ -43,7 +46,6 @@ public class CodeEditor extends AnchorPane implements Initializable {
 		
 		editor.setContextMenuEnabled(false);
 		engine = editor.getEngine();
-		
 		
 		setCode("");
 	}
@@ -56,7 +58,7 @@ public class CodeEditor extends AnchorPane implements Initializable {
 		if (reader.hasNext()) {
 			return reader.next();
 		} else {
-			return "<h1>Fehler beim Laden des Editors</h1>";
+			return "<h1>Unable to load editor</h1>";
 		}
 	}
 	
@@ -80,6 +82,14 @@ public class CodeEditor extends AnchorPane implements Initializable {
 		}
 	}
 	
+	@FXML
+	private void mouseReleasedHandler(MouseEvent event) {
+		if (this.readonly && this.lineHighlight) {
+			event.consume();
+			highlightLine(currentLine);
+		}
+	}
+	
 	public boolean getCodeEdited() {
 		boolean temp = this.codeEdited;
 		this.codeEdited = false;
@@ -93,20 +103,35 @@ public class CodeEditor extends AnchorPane implements Initializable {
 	}
 	public void setAutofocus(boolean value) {
 		this.autofocus = value;
+		
+		reloadEditor();
 	}
-	
+
 	private boolean lineHighlight;
 	public boolean getHighlightLine() {
 		return this.lineHighlight;
 	}
 	public void setHighlightLine(boolean value) {
 		this.lineHighlight = value;
+		
+		reloadEditor();
+	}
+	
+	private boolean readonly;
+	public boolean getReadonly() {
+		return this.readonly;
+	}
+	public void setReadonly(boolean value) {
+		this.readonly = value;
+		
+		reloadEditor();
 	}
 
 	
 	public void setCode(String code) {
-		String content = editorTemplate.replace("${autofocus}", this.autofocus ? " autofocus" : "");
+		String content = editorTemplate.replace("${autofocus}", this.autofocus ? "autofocus: true," : "");
 		content = content.replace("${highlight-line}", this.lineHighlight ? "styleActiveLine: true," : "");
+		content = content.replace("${readonly}", this.readonly ? "readOnly: true, cursorBlinkRate: -1," : "");
 		content = content.replace("${code}", code);
 		
 		this.engine.loadContent(content);
@@ -118,8 +143,10 @@ public class CodeEditor extends AnchorPane implements Initializable {
 		return code;
 	}
 	
+	private int currentLine;
 	public void highlightLine(int line) {
 		if (line > 0) {
+			currentLine = line;
 			engine.executeScript("editor.setCursor({line: " + (line - 1) + ", ch:0});");
 		}
 	}

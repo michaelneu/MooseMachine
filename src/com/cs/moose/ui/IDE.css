@@ -54,17 +54,3 @@
 #main-menu .menu-item:hover {
 	-fx-background-color: #f7f7f7;
 }
-
-
-
-
-/*
- * debug view
- */
- .split-pane {
-	-fx-box-border: transparent;
-}
-.split-pane .split-pane-divider {
-	-fx-background-color: #ccc;
-	-fx-padding: 0 1px;
-}

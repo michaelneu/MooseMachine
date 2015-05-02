@@ -3,34 +3,25 @@ package com.cs.moose.ui.controls.memorytable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.cs.moose.ui.controls.UserControl;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class MemoryTable extends AnchorPane implements Initializable {
+public class MemoryTable extends UserControl {
 	private final double firstColumnPercentage = 75 / 570.0;
 	@FXML
 	private TableView table;
 	
 	public MemoryTable() {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MemoryTable.fxml"));
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
-		
-		try {
-			fxmlLoader.load();
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
+		super("MemoryTable.fxml");
 	}
 
 	@Override

@@ -14,7 +14,6 @@
 	-fx-background-insets: 0, 0 0 1 0;
 	-fx-border-color: transparent;
 	-fx-border-width: 0px;
-	-fx-table-cell-border-color: derive(-fx-color, 5%);
 }
 
 .table-row-cell:odd:filled:selected {

@@ -24,10 +24,14 @@
 				color: #ff7c4f !important;
 				font-weight: bold;
 			}
+			
+			.CodeMirror-activeline-background {
+				background-color: rgba(255, 177, 79, 0.4) !important;
+			}
 		</style>
 	</head>
 	<body>
-		<textarea id="code" name="code"${autofocus}>${code}</textarea>
+		<textarea id="code" name="code">${code}</textarea>
 		
 		<script type="text/javascript">
 			CodeMirror.defineMode("moose", function (config, parserConfig) {
@@ -71,7 +75,9 @@
 			});
 			
 			var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-				//${highlight-line}
+				${highlight-line}
+				${readonly}
+				${autofocus}
 				lineNumbers: true,
 				indentWithTabs: true,
 				mode: "moose"
