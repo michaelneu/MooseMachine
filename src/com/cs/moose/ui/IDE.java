@@ -106,6 +106,8 @@ public class IDE implements Initializable {
 			}
 		}
 		
+		debug.pause();
+		
 		if (currentView == CurrentView.EDITOR) {
 			String code = editor.getCode();
 			try {
@@ -201,6 +203,10 @@ public class IDE implements Initializable {
 				
 				try {
 					String code = File.readAllText(path);
+
+					// prevent html injection
+					code = code.replaceAll("\\<", "&lt;");
+					code = code.replaceAll("\\>", "&gt;");
 					
 					editor.setCode(code);
 					titlebarTextEditor.setText(path);

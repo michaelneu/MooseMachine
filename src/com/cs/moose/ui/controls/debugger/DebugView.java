@@ -63,7 +63,6 @@ public class DebugView extends UserControl {
 								debugWorker.reportProgress(0, ex);
 							}
 						} else if (guiNeedsUpdate) {
-							System.out.println("update required");
 							guiNeedsUpdate = false;
 							
 							debugWorker.reportProgress(1);
