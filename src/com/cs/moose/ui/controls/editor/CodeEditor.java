@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import com.cs.moose.machine.Lexer;
 import com.cs.moose.ui.controls.UserControl;
 
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ public class CodeEditor extends UserControl {
 	private WebEngine engine;
 	
 	private boolean codeEdited;
+	private String[] codeLines;
 	
 	public CodeEditor() {
 		super("CodeEditor.fxml");
@@ -137,6 +139,8 @@ public class CodeEditor extends UserControl {
 
 	
 	public void setCode(String code) {
+		this.codeLines = Lexer.stripNonCommands(code).split("\n");
+		
 		String content = editorTemplate.replace("${autofocus}", this.autofocus ? "autofocus: true," : "");
 		content = content.replace("${highlight-line}", this.lineHighlight ? "styleActiveLine: true," : "");
 		content = content.replace("${readonly}", this.readonly ? "readOnly: true, cursorBlinkRate: -1," : "");
@@ -164,5 +168,29 @@ public class CodeEditor extends UserControl {
 			currentLine = line;
 			engine.executeScript("editor.setCursor({line: " + (line - 1) + ", ch:0});");
 		}
+	}
+	
+	public int findNextCommandLine(int targetLine) {
+		int whitespaces = 0,
+			nonWhitespaces = 0;
+		
+		for (String line : codeLines) {
+			if (line.length() == 0) {
+				whitespaces++;
+			} else {
+				if (nonWhitespaces == targetLine) {
+					break;
+				} else {
+					nonWhitespaces++;
+				}
+			}
+		}
+		
+		return whitespaces + nonWhitespaces + 1;
+	}
+	public void highlightNextCommandLine(int targetLine) {
+		int line = findNextCommandLine(targetLine);
+		
+		highlightLine(line);
 	}
 }

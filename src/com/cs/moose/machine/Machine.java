@@ -17,7 +17,7 @@ public class Machine {
 		this.previousStates = new ArrayList<MachineDiff>();
 	}
 	
-	public void goForward() throws MachineException {
+	public synchronized void goForward() throws MachineException {
 		if (!flagHold) {
 			// get command
 			short memoryCommand = this.memory[this.nextCommand], 
@@ -275,7 +275,7 @@ public class Machine {
 		}
 	}
 	
-	public boolean goBackwards() {
+	public synchronized boolean goBackwards() {
 		int length = this.previousStates.size();
 		
 		if (length > 0) {

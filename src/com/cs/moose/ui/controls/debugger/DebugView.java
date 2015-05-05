@@ -5,8 +5,8 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 
+import com.cs.moose.BackgroundWorker;
 import com.cs.moose.exceptions.MachineException;
-import com.cs.moose.machine.Lexer;
 import com.cs.moose.machine.Machine;
 import com.cs.moose.ui.controls.UserControl;
 import com.cs.moose.ui.controls.editor.CodeEditor;
@@ -18,11 +18,69 @@ public class DebugView extends UserControl {
 	@FXML
 	private CodeEditor editor;
 	
-	private Machine machine;
-	private String[] strippedCode;
+	private volatile Machine machine;
+	private volatile boolean paused = true;
+	private BackgroundWorker debugWorker;
 	
 	public DebugView() {
 		super("DebugView.fxml");
+		
+		debugWorker = new BackgroundWorker() {
+			
+			@Override
+			public void onWorkerDone(BackgroundWorker.Finished args) {
+				
+			}
+			
+			@Override
+			public void onProgressChanged(BackgroundWorker.ProgressChanged args) {
+				switch (args.getProgress()) {
+					case 0:
+						((MachineException)args.getUserState()).printStackTrace();
+						break;
+						
+					case 1: 
+						pause();
+						updateDebugger();
+						break;
+				}
+			}
+			
+			@Override
+			public void onDoWork(BackgroundWorker.Parameters args) {
+				boolean guiNeedsUpdate = false;
+				
+				while (!args.isCancelled()) {
+					if (machine != null) {
+						boolean running = machine.isRunning();
+					
+						if (!paused && running) {
+							guiNeedsUpdate = true;
+							
+							try {
+								machine.goForward();
+							} catch (MachineException ex) {
+								debugWorker.reportProgress(0, ex);
+							}
+						} else if (guiNeedsUpdate) {
+							System.out.println("update required");
+							guiNeedsUpdate = false;
+							
+							debugWorker.reportProgress(1);
+						} else if (!paused && !running) {
+							pause();
+						} else {
+							BackgroundWorker.sleep(100);
+						}
+					} else {
+						BackgroundWorker.sleep(100);
+					}
+				}
+			}
+		};
+		
+		// start the debug worker
+		debugWorker.runWorkerAsync();
 	}
 
 	@Override
@@ -31,43 +89,24 @@ public class DebugView extends UserControl {
 	}
 	
 	public void startDebug(String code, Machine machine) {
-		this.machine = machine;
-		this.strippedCode = Lexer.stripNonCommands(code).split("\n");
+		pause();
 		
-		int initialLine = findCurrentLine();
-		editor.setInitialLine(initialLine);
+		this.machine = machine;
+		
+		this.memoryTable.setMemory(machine.getWorkingMemory());
+
 		editor.setCode(code);
+		int initialLine = editor.findNextCommandLine(0);
+		editor.setInitialLine(initialLine);
 	}
 	
 	private void updateDebugger() {
 		this.memoryTable.setMemory(machine.getWorkingMemory());
-		
-		int currentLine = findCurrentLine();
-		editor.highlightLine(currentLine);
-	}
-	
-	private int findCurrentLine() {
-		int targetLine = machine.getNextCommand() / 2,
-				whitespaces = 0,
-				nonWhitespaces = 0;
-		
-		for (String line : strippedCode) {
-			if (line.length() == 0) {
-				whitespaces++;
-			} else {
-				if (nonWhitespaces == targetLine) {
-					break;
-				} else {
-					nonWhitespaces++;
-				}
-			}
-		}
-		
-		return whitespaces + nonWhitespaces + 1;
+		editor.highlightNextCommandLine(machine.getNextCommand() / 2);
 	}
 	
 	
-	public void goForwards() {
+	public void next() {
 		try {
 			this.machine.goForward();
 			updateDebugger();
@@ -75,12 +114,7 @@ public class DebugView extends UserControl {
 			// display error
 		}
 	}
-	
-	public void runCompleteProgram() {
-		
-	}
-	
-	public boolean goBackwards() {
+	public boolean prev() {
 		boolean successfull = this.machine.goBackwards();
 		
 		if (successfull) {
@@ -90,7 +124,17 @@ public class DebugView extends UserControl {
 		return successfull;
 	}
 	
-	public boolean canGoForwards() {
-		return this.machine.isRunning();
+	
+	public void pause() {
+		this.paused = true;
+	}
+	
+	public void unpause() {
+		this.paused = false;
+	}
+	
+	
+	public boolean isPlaying() {
+		return !this.paused && (this.machine != null && this.machine.isRunning());
 	}
 }

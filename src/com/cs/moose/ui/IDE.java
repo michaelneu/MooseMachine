@@ -3,6 +3,7 @@ package com.cs.moose.ui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.cs.moose.BackgroundWorker;
 import com.cs.moose.Main;
 import com.cs.moose.exceptions.CompilerException;
 import com.cs.moose.exceptions.JumpPointException;
@@ -35,20 +36,20 @@ public class IDE implements Initializable {
 	
 	private static ILocale locale = ILocale.getLocale();
 	private String currentFile;
-	private Machine currentMachine;
+	private volatile CurrentView currentView = CurrentView.EDITOR;
 	
 	@FXML
 	private CodeEditor editor;
 	@FXML
-	private AnchorPane mainMenu, debugControls;
+	private AnchorPane mainMenu, debugControls, debugIconPause;
 	@FXML
 	private Rectangle iconStop;
 	@FXML
 	private Label titlebarTextEditor, titlebarTextDebug;
 	@FXML
-	private Polygon titlebarPolygon, iconPlay;
+	private Polygon titlebarPolygon, iconPlay, debugIconPlay;
 	@FXML
-	private DebugView debug;
+	private volatile DebugView debug;
 	
 
 	@Override
@@ -59,6 +60,40 @@ public class IDE implements Initializable {
 		fileChooser.getExtensionFilters().add(filter);
 		filter = new FileChooser.ExtensionFilter("Text-" + locale.getFiles(), "*.txt");
 		fileChooser.getExtensionFilters().add(filter);
+		
+		
+		// initialize gui updating
+		BackgroundWorker guiUpdater = new BackgroundWorker() {
+			
+			@Override
+			protected void onWorkerDone(Finished args) {
+				args.getException().printStackTrace();
+			}
+			
+			@Override
+			protected void onProgressChanged(ProgressChanged args) {
+				debugIconPause.setVisible(!debugIconPause.isVisible());
+				debugIconPlay.setVisible(!debugIconPlay.isVisible());
+			}
+			
+			@Override
+			protected void onDoWork(Parameters args) {
+				boolean wasPlayingPreviously = false;
+				
+				while (!args.isCancelled()) {
+					boolean nowPlaying = debug.isPlaying();
+					
+					if (nowPlaying != wasPlayingPreviously) {
+						this.reportProgress(0);
+						wasPlayingPreviously = nowPlaying;
+					}
+					
+					BackgroundWorker.sleep(100);
+				}
+			}
+		};
+		
+		guiUpdater.runWorkerAsync();
 	}
 	
 	@FXML
@@ -71,12 +106,16 @@ public class IDE implements Initializable {
 			}
 		}
 		
-		if (currentMachine == null) {
+		if (currentView == CurrentView.EDITOR) {
 			String code = editor.getCode();
 			try {
+				// compile the code
 				Lexer lexer = new Lexer(code);
-				currentMachine = Compiler.getMachine(lexer);
+				Machine currentMachine = Compiler.getMachine(lexer);
 				
+				
+				
+				// add the compiled code to the debug view
 				debug.startDebug(code,  currentMachine);
 				toggleView();
 			} catch (SyntaxException ex) {
@@ -88,18 +127,17 @@ public class IDE implements Initializable {
 				Dialog.showError(locale.getCompilerUnknownError(), locale.getCompilerError());
 			}
 		} else {
-			currentMachine = null;
-			
 			toggleView();
 		}
 	}
 	
 	private void toggleView() {
-		if (currentMachine == null) {
-			
+		if (currentView == CurrentView.DEBUG) {
 			titlebarPolygon.setFill(Color.CORAL);
+			currentView = CurrentView.EDITOR;
 		} else {
 			titlebarPolygon.setFill(Color.DARKGRAY);
+			currentView = CurrentView.DEBUG;
 		}
 
 		titlebarTextEditor.setVisible(!titlebarTextEditor.isVisible());
@@ -116,17 +154,21 @@ public class IDE implements Initializable {
 	
 	@FXML
 	private void debugGoForward(MouseEvent event) {
-		debug.goForwards();
+		debug.next();
 		event.consume();
 	}
 	@FXML
 	private void debugPlayPause(MouseEvent event) {
-		
+		if (this.debug.isPlaying()) {
+			debug.pause();
+		} else {
+			debug.unpause();
+		}
 		event.consume();
 	}
 	@FXML
 	private void debugGoBack(MouseEvent event) {
-		debug.goBackwards();
+		debug.prev();
 		event.consume();
 	}
 	

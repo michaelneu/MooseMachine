@@ -1,7 +1,7 @@
 // Dieses Programm zählt bis zum maximalen Wert einer Zahl
 // und speichert diesen Wert in Zelle 100
 
-LOADI 1			// Wert 1 in den Akkumulator laden
+LOADI 1		// Wert 1 in den Akkumulator laden
 STORE 100		// Anfangswert in Zelle 100 speichern
 
 loop: 			// die benötigte Schleife

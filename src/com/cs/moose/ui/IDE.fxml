@@ -84,7 +84,7 @@
 							</points>
 						</Polygon>
 						<!-- play icon -->
-						<Polygon onMouseClicked="#debugPlayPause" fx:id="iconPlay" styleClass="icon" fill="WHITE" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="117">
+						<Polygon onMouseClicked="#debugPlayPause" fx:id="debugIconPlay" styleClass="icon" fill="WHITE" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="117">
 							<points>
 								<Double fx:value="-10" />
 								<Double fx:value="-11" />
@@ -96,6 +96,13 @@
 								<Double fx:value="11" />
 							</points>
 						</Polygon>
+						<!-- pause icon -->
+						<AnchorPane visible="false" onMouseClicked="#debugPlayPause" fx:id="debugIconPause" styleClass="icon" AnchorPane.topAnchor="11" AnchorPane.leftAnchor="117">
+							<children>
+								<Rectangle width="6" height="20" fill="WHITE" />
+								<Rectangle width="6" height="20" fill="WHITE" layoutX="12" />
+							</children>
+						</AnchorPane>
 						
 						<!-- backwards background -->
 						<Polygon onMouseClicked="#debugGoBack" styleClass="icon" fill="LIGHTGRAY">
