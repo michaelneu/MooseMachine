@@ -1,0 +1,16 @@
+.cm-builtin {
+	color: #3979A3 !important;
+	font-weight: bold;
+}
+.cm-keyword {
+	color: #37B277 !important;
+	font-weight: bold;
+}
+.cm-variable {
+	color: #ff7c4f !important;
+	font-weight: bold;
+}
+
+.CodeMirror-activeline-background {
+	background-color: rgba(255, 177, 79, 0.4) !important;
+}
