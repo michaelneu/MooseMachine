@@ -9,3 +9,7 @@
 .check-box:disabled {
 	-fx-opacity: 1;
 }
+
+.text-area {
+	-fx-font-family: monospace;
+}
