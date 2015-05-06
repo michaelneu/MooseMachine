@@ -1,5 +1,8 @@
 package com.cs.moose;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import com.cs.moose.ui.IDE;
 
 import javafx.application.Application;
@@ -44,6 +47,21 @@ public class Main extends Application {
 	}
 	
 	public static void launchNew() {
-		// not detachable
+		try {
+			// see http://stackoverflow.com/questions/4159802/how-can-i-restart-a-java-application
+			
+			final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+			final File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+			final ArrayList<String> command = new ArrayList<String>();
+			command.add(javaBin);
+			command.add("-jar");
+			command.add(currentJar.getPath());
+	
+			final ProcessBuilder builder = new ProcessBuilder(command);
+			builder.start();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
