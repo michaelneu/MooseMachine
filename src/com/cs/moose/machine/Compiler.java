@@ -12,7 +12,9 @@ public class Compiler {
 	private static final int MAX_MEMORY_SIZE = 65536;
 	
 	public static Machine getMachine(Lexer lexer) throws JumpPointException, CompilerException {
-		ArrayList<String> requiredJumpDeclarations = lexer.getJumpCalls();
+		ArrayList<String> requiredJumpDeclarations = lexer.getJumpCalls(),
+						  strings = new ArrayList<String>();
+		
 		Hashtable<String, JumpPoint> declaredJumpPoints = lexer.getJumpPointDefinitions();
 		
 		for (String point : requiredJumpDeclarations) {
@@ -56,6 +58,7 @@ public class Compiler {
 					case HOLD:
 					case NOOP: 
 					case RESET: 
+					case PUTA:
 						memory[i] = memoryCommand.numeric();
 						memory[i + 1] = 0;
 						break;
@@ -81,12 +84,28 @@ public class Compiler {
 						memory[i + 1] = point.getMemoryPosition();
 						break;
 						
+					case PUTS:
+						if (parameter.matches("(\"([^\"]*)\"|'([^']*)'|)")) {
+							parameter = parameter.substring(1, parameter.length() - 1);
+							
+							// add possibility to print new lines by replacing "\\n" with "\n". to prevent replacing "\\\\n" with "\n", replace "\\\n" back to original
+							parameter = parameter.replaceAll("\\\\n", "\n").replaceAll("\\\\\n", "\\\\n");
+							parameter = parameter.replaceAll("\\\\t", "\t").replaceAll("\\\\\t", "\\\\t");
+							
+							strings.add(parameter);
+							
+							memory[i] = memoryCommand.numeric();
+							memory[i + 1] = (short)(strings.size() - 1);
+							
+							break;
+						}
+						
 					default: 
 						try {
 							memory[i] = memoryCommand.numeric();
 							memory[i + 1] = (short)Integer.parseInt(parameter);
 						} catch (Exception ex) {
-							throw new CompilerException("Command \"" + memoryCommand + "\" doesn't support parameters of type \"String\" (given parameter was \"" + parameter + "\")");
+							throw new CompilerException("Command \"" + memoryCommand + "\" doesn't support the given parameters (parameter was \"" + parameter + "\")");
 						}
 						break;
 				}
@@ -95,6 +114,6 @@ public class Compiler {
 			}
 		}
 		
-		return new Machine(memory);
+		return new Machine(memory, strings);
 	}
 }

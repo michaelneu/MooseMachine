@@ -11,7 +11,7 @@ public class Lexer {
 	private static final String regexComments = "(\\#|\\/\\/)(.*)",
 			regexJump = "^([A-Za-z0-9\\-]+\\:\\s*)",
 			regexCommand = "([A-Za-z]+)",
-			regexParameter = "\\s((\\-?)\\d+|(\\-)?[A-Za-z0-9\\-]+)",
+			regexParameter = "\\s((\\-?)\\d+|(\\-)?[A-Za-z0-9\\-]+|\\\"([^\"]+)\\\"|\\'([^']+)')",
 			regexJumpCommand = regexJump + "?" + regexCommand, // [ JMP: ]   COMMAND   [ #COMMENT ]
 			regexJumpCommandParameter = regexJumpCommand + regexParameter, // [ JMP: ]   COMMAND   [ CHARACTERS | NUMBER ]   [ #COMMENT ]
 			regexJumpCall = "(i?)j[a-z]+\\s+[0-9a-z]+"; // JMP POINT

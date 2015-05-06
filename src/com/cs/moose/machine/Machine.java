@@ -6,32 +6,49 @@ import com.cs.moose.types.*;
 import java.util.ArrayList;
 
 public class Machine {
-	private short accumulator, nextCommand;
+	private short accumulator;
+	private int nextCommand;
 	private short[] memory;
 	private boolean flagZero, flagNegative, flagV, flagHold;
 	
+	private ArrayList<String> strings;
+	private String stdout;
+	
 	private ArrayList<MachineDiff> previousStates;
 	
-	public Machine(short[] memory) {
+	public Machine(short[] memory, ArrayList<String> strings) {
 		this.memory = memory;
+		this.strings = strings;
+		this.stdout = "";
+		
 		this.previousStates = new ArrayList<MachineDiff>();
 	}
 	
 	public synchronized void goForward() throws MachineException {
-		if (!flagHold) {
+		if (!this.flagHold) {
+			// emergency brake, in case no hold is added
+			if (this.nextCommand == this.memory.length) {
+				this.flagHold = true;
+				return;
+			}
+			
 			// get command
 			short memoryCommand = this.memory[this.nextCommand], 
 					memoryParameter = this.memory[this.nextCommand + 1];
 			
 			Command command = Command.fromNumeric(memoryCommand);
 			
+			if (command == null) {
+				throw new MachineException(null, "Invalid command: " + memoryCommand);
+			}
+			
 			try {
 				// save current state
 				MachineDiff state;
 				if (command == Command.STORE) {
-					state = new MachineDiff(this.accumulator, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV, memoryParameter, this.memory[memoryParameter]);
+					state = new MachineDiff(this.accumulator, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV, this.stdout, memoryParameter, this.memory[memoryParameter]);
 				} else {
-					state = new MachineDiff(this.accumulator, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV);
+					state = new MachineDiff(this.accumulator, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV, this.stdout);
 				}
 				this.previousStates.add(state);
 
@@ -249,6 +266,22 @@ public class Machine {
 				break;
 				
 				
+			// output to stdout
+			case PUT:
+				this.stdout += this.memory[parameter];
+				break;
+			
+			case PUTS: 
+				if (parameter >= 0 && parameter < this.strings.size()) {
+					this.stdout += this.strings.get(parameter);
+				}
+				break;
+				
+			case PUTA: 
+				this.stdout += this.accumulator;
+				break;
+				
+				
 			// machine actions
 			case HOLD:
 				this.flagHold = true;
@@ -302,22 +335,12 @@ public class Machine {
 		this.flagNegative = state.getFlagNegative();
 		this.flagHold = state.getFlagHold();
 		this.flagV = state.getFlagV();
+		
+		this.stdout = state.getStdout();
 	}
 	
 	public MachineState toMachineState() {
-		return new MachineState(this.accumulator, this.memory.clone(), this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV);
-	}
-	
-	public boolean isRunning() {
-		return !this.flagHold;
-	}
-	
-	public short[] getWorkingMemory() {
-		return this.memory;
-	}
-	
-	public int getNextCommand() {
-		return this.nextCommand;
+		return new MachineState(this.accumulator, this.memory, this.nextCommand, this.flagZero, this.flagNegative, this.flagHold, this.flagV, this.stdout);
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import com.cs.moose.ui.controls.UserControl;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -38,7 +39,20 @@ public class MemoryTable extends UserControl {
 		}
 		
 		
-		setMemory(new short[65536]);
+		// prevent column reordering
+		table.getColumns().addListener(new ListChangeListener() {
+			private boolean suspended;
+			@Override
+			public void onChanged(Change change) {
+				change.next();
+				
+				if (change.wasReplaced() && !this.suspended) {
+					this.suspended = true;
+					table.getColumns().setAll(columns);
+					this.suspended = false;
+				}
+			}
+		});
 		
 
 		// add resize listener to keep columns the right size

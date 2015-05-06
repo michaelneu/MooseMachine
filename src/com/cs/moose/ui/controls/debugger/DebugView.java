@@ -4,10 +4,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 import com.cs.moose.BackgroundWorker;
 import com.cs.moose.exceptions.MachineException;
 import com.cs.moose.machine.Machine;
+import com.cs.moose.types.MachineState;
 import com.cs.moose.ui.controls.UserControl;
 import com.cs.moose.ui.controls.editor.CodeEditor;
 import com.cs.moose.ui.controls.memorytable.MemoryTable;
@@ -17,6 +21,12 @@ public class DebugView extends UserControl {
 	private MemoryTable memoryTable;
 	@FXML
 	private CodeEditor editor;
+	@FXML
+	private TextArea stdout;
+	@FXML
+	private CheckBox cbHold,cbOverflow, cbNegative, cbZero;
+	@FXML
+	private Label lblAccu;
 	
 	private volatile Machine machine;
 	private volatile boolean paused = true;
@@ -52,7 +62,7 @@ public class DebugView extends UserControl {
 				
 				while (!args.isCancelled()) {
 					if (machine != null) {
-						boolean running = machine.isRunning();
+						boolean running = !machine.toMachineState().getFlagHold();
 					
 						if (!paused && running) {
 							guiNeedsUpdate = true;
@@ -60,6 +70,7 @@ public class DebugView extends UserControl {
 							try {
 								machine.goForward();
 							} catch (MachineException ex) {
+								pause();
 								debugWorker.reportProgress(0, ex);
 							}
 						} else if (guiNeedsUpdate) {
@@ -92,16 +103,34 @@ public class DebugView extends UserControl {
 		
 		this.machine = machine;
 		
-		this.memoryTable.setMemory(machine.getWorkingMemory());
+		this.memoryTable.setMemory(machine.toMachineState().getMemory());
 
-		editor.setCode(code);
+		this.editor.setCode(code);
 		int initialLine = editor.findNextCommandLine(0);
-		editor.setInitialLine(initialLine);
+		this.editor.setInitialLine(initialLine);
+		
+
+		this.stdout.setText("");
+		this.lblAccu.setText("0");
+		
+		for (CheckBox box : new CheckBox[] { cbHold, cbOverflow, cbNegative, cbZero }) {
+			box.setSelected(false);
+		}
 	}
 	
 	private void updateDebugger() {
-		this.memoryTable.setMemory(machine.getWorkingMemory());
-		editor.highlightNextCommandLine(machine.getNextCommand() / 2);
+		MachineState state = this.machine.toMachineState();
+		
+		this.memoryTable.setMemory(state.getMemory());
+		this.editor.highlightNextCommandLine(state.getNextCommand() / 2);
+		this.stdout.setText(state.getStdout());
+		
+		this.cbHold.setSelected(state.getFlagHold());
+		this.cbOverflow.setSelected(state.getFlagV());
+		this.cbNegative.setSelected(state.getFlagNegative());
+		this.cbZero.setSelected(state.getFlagZero());
+		
+		this.lblAccu.setText(state.getAccumulator() + "");
 	}
 	
 	
@@ -134,6 +163,6 @@ public class DebugView extends UserControl {
 	
 	
 	public boolean isPlaying() {
-		return !this.paused && (this.machine != null && this.machine.isRunning());
+		return !this.paused && (this.machine != null && !this.machine.toMachineState().getFlagHold());
 	}
 }

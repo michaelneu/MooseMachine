@@ -1,0 +1,54 @@
+// Die obligatorische Implementierung eines FizzBuzz-Programms. 
+// FizzBuzz ist ein (Trink-)Spiel, bei dem Personen hintereinander 
+// bis zu einer (theoretisch unendlich hohen) Grenze zählen, wobei 
+// jede Zahl, die durch 3 teilbar ist durch "Fizz" und jede durch 
+// 5 teilbare Zahl durch "Buzz" ersetzt wird. Zahlen, die durch 
+// 3 und 5 teilbar sind werden durch "FizzBuzz" ersetzt. 
+
+
+LOADI 20				// Anzahl der Zahlen
+STORE 1000
+
+
+
+loop:					// Startpunkt der Schleife
+	LOAD 1001			// Zählvariable um 1 erhöhen
+	ADDI 1
+	STORE 1001
+	
+	MODI 3				// Teilbarkeit durch %3 prüfen
+	CMPI 0			
+	JNE nofizz			// Sprung wenn AKKU % 3 != 0
+	
+	LOADI 1
+	STORE 1003			// "Flag" setzen, dass bereits ausgegeben wurde
+	PUTS "FIZZ"
+	
+	nofizz:				// kein "FIZZ" wurde ausgegeben
+		LOAD 1001		// Zählvariable wieder laden
+		
+		MODI 5			
+		CMPI 0
+		JNE nobuzz		// Sprung, wenn Zählvariable % 5 != 0
+		
+		LOADI 1			// "Flag" setzen
+		STORE 1003
+		PUTS "BUZZ"	
+		
+	nobuzz:				// kein BUZZ wurde ausgegeben
+		LOAD 1003
+		CMPI 1			// Prüfen, ob überhaupt ausgegeben wurde
+		JEQ loop-cont	// Sprung, wenn nichts ausgegeben wurde
+		PUT 1001
+	
+	
+	loop-cont:
+		LOADI 0			// Zurücksetzen des "Flags"
+		STORE 1003
+		
+		PUTS "\n"
+		LOAD 1001
+		CMP 1000		
+		JLT loop		// Sprung wenn Zählvariable < Anzahl
+
+HOLD

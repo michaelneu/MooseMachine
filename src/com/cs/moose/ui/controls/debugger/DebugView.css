@@ -5,3 +5,7 @@
 	-fx-background-color: #ccc;
 	-fx-padding: 0 1px;
 }
+
+.check-box:disabled {
+	-fx-opacity: 1;
+}

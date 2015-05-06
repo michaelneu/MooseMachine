@@ -179,7 +179,7 @@
 				</Polygon>
 							
 				<!-- Stop icon -->
-				<Rectangle fx:id="iconStop" visible="false" fill="WHITE" height="20" width="20" AnchorPane.topAnchor="12" AnchorPane.leftAnchor="42" />
+				<Rectangle fx:id="iconStop" styleClass="icon" onMouseClicked="#toggleModes" visible="false" fill="WHITE" height="20" width="20" AnchorPane.topAnchor="12" AnchorPane.leftAnchor="42" />
 
 				<!-- Menu Hotdog -->
 				<AnchorPane onMouseClicked="#showMainMenu" prefHeight="42" prefWidth="75" styleClass="hotdog" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">

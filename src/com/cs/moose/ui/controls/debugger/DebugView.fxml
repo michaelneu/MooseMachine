@@ -5,6 +5,8 @@
 <?import javafx.scene.control.*?>
 <?import com.cs.moose.ui.controls.memorytable.MemoryTable?>
 <?import com.cs.moose.ui.controls.editor.CodeEditor?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.CheckBox?>
 
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@DebugView.css">
 	<children>
@@ -12,7 +14,7 @@
 			<items>
 				<AnchorPane minHeight="0" minWidth="0" prefHeight="160" prefWidth="100">
 					 <children>
-						<SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200" prefWidth="160" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+						<SplitPane dividerPositions="0.6" orientation="VERTICAL" prefHeight="200" prefWidth="160" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 							<items>
 								<AnchorPane minHeight="0" minWidth="0" prefHeight="100" prefWidth="160">
 									<children>
@@ -22,7 +24,15 @@
 
 								<AnchorPane minHeight="0" minWidth="0" prefHeight="100" prefWidth="160">
 									<children>
-										<Label layoutX="34" layoutY="29" text="Watches" />
+										<CheckBox fx:id="cbHold" text="Hold" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" disable="true" />
+										<CheckBox fx:id="cbOverflow" text="Overflow" AnchorPane.leftAnchor="75" AnchorPane.topAnchor="10" disable="true" />
+										<CheckBox fx:id="cbNegative" text="Negative" AnchorPane.leftAnchor="165" AnchorPane.topAnchor="10" disable="true" />
+										<CheckBox fx:id="cbZero" text="Zero" AnchorPane.leftAnchor="260" AnchorPane.topAnchor="10" disable="true" />
+										
+										<Label text="Akkumulator: " AnchorPane.leftAnchor="325" AnchorPane.topAnchor="11" />
+										<Label fx:id="lblAccu" text="0" AnchorPane.leftAnchor="415" AnchorPane.topAnchor="11" />
+										
+										<TextArea fx:id="stdout" promptText="Console" editable="false" AnchorPane.topAnchor="40" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" />
 									</children>
 								</AnchorPane>
 							</items>

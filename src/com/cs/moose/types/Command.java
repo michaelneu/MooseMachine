@@ -60,6 +60,11 @@ public enum Command {
 	RESET	(1),	// resets the processor
 	NOOP	(0),	// nothing
 	HOLD	(99),	// stops the processor
+	
+	PUT		(700),	// output parameter to stdout
+	PUTS	(701),	// output string to stdout
+	PUTA	(702),	// output accumulator to stdout
+	
 	FAIL	(Integer.MIN_VALUE);	// used for compilation purpose
 
 	private static HashMap<Short, Command> commands;
