@@ -1,10 +1,9 @@
 package com.cs.moose.ui.controls.editor;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
+import com.cs.moose.io.Resource;
 import com.cs.moose.machine.Lexer;
 import com.cs.moose.ui.controls.UserControl;
 
@@ -52,13 +51,11 @@ public class CodeEditor extends UserControl {
 		setCode("");
 	}
 	
-	@SuppressWarnings("resource")
 	private static String getEditorTemplate() {
-		InputStream indexStream = CodeEditor.class.getResourceAsStream("index.html");
-		Scanner reader = new Scanner(indexStream).useDelimiter("\\A");
+		String index = Resource.getContent(CodeEditor.class, "index.html");
 		
-		if (reader.hasNext()) {
-			return reader.next();
+		if (index != null) {
+			return index;
 		} else {
 			return "<h1>Unable to load editor</h1>";
 		}

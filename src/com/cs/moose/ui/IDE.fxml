@@ -205,63 +205,48 @@
 		<!-- Main menu -->
 		<AnchorPane id="main-menu" fx:id="mainMenu" prefHeight="175" prefWidth="250" visible="false" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="42">
 			<children>
-				<Label onMouseClicked="#mainMenuNew" contentDisplay="RIGHT" layoutY="6" styleClass="menu-item" text="Neu" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-					<padding>
-						<Insets bottom="10" left="15" right="10" top="10" />
-					</padding>
-					<graphic>
-						<Label contentDisplay="RIGHT" prefHeight="16" prefWidth="190" text="Strg + N" textAlignment="RIGHT" textFill="#a4a4a4">
-							<padding>
-								<Insets left="130" />
-							</padding>
-						</Label>
-					</graphic>
-				</Label>
-					
-				<Label onMouseClicked="#mainMenuOpenFile" contentDisplay="RIGHT" layoutY="6" styleClass="menu-item" text="Datei öffnen" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="35">
-					<padding>
-							<Insets bottom="10" left="15" right="10" top="10" />
-					</padding>
-					<graphic>
-						<Label contentDisplay="RIGHT" prefHeight="16" prefWidth="135" text="Strg + O" textAlignment="RIGHT" textFill="#a4a4a4">
-							 <padding>
-									<Insets left="75" />
-							 </padding>
-						</Label>
-					</graphic>
-				</Label>
-					
-				<Label onMouseClicked="#mainMenuSave" contentDisplay="RIGHT" layoutY="6" styleClass="menu-item" text="Speichern" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
-					 <padding>
-							<Insets bottom="10" left="15" right="10" top="10" />
-					</padding>
-					<graphic>
-						<Label contentDisplay="RIGHT" prefHeight="16" prefWidth="150" text="Strg + S" textAlignment="RIGHT" textFill="#a4a4a4">
-							<padding>
-								<Insets left="90" />
-							</padding>
-						</Label>
-					</graphic>
-				</Label>
-					
-				<Label onMouseClicked="#mainMenuSaveAs" layoutY="6" styleClass="menu-item" text="Speichern unter..." AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="105">
-					<padding>
-						<Insets bottom="10" left="15" right="10" top="10" />
-					</padding>
-				</Label>
-					
-				<Label onMouseClicked="#mainMenuExit" contentDisplay="RIGHT" layoutY="6" styleClass="menu-item" text="Beenden" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="140">
-					<padding>
-							<Insets bottom="10" left="15" right="10" top="10" />
-					</padding>
-					<graphic>
-						<Label contentDisplay="RIGHT" prefHeight="16" prefWidth="155" text="Strg + W" textAlignment="RIGHT" textFill="#a4a4a4">
-							<padding>
-								<Insets left="95" />
-							</padding>
-						</Label>
-					</graphic>
-				</Label>
+				<!-- launch new instance -->
+				<AnchorPane onMouseClicked="#mainMenuNew" styleClass="menu-item" prefHeight="35" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" >
+					<children>
+						<Label fx:id="lblMainMenuNew" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="6" />
+						
+						<Label text="Ctrl + N" textAlignment="RIGHT" textFill="#a4a4a4" AnchorPane.topAnchor="6" AnchorPane.rightAnchor="10" />
+					</children>
+				</AnchorPane>
+				
+				<!-- open file -->
+				<AnchorPane onMouseClicked="#mainMenuOpenFile" styleClass="menu-item" prefHeight="35" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="35">
+					<children>
+						<Label fx:id="lblMainMenuOpen"  AnchorPane.leftAnchor="10" AnchorPane.topAnchor="6" />
+						
+						<Label text="Ctrl + O" textAlignment="RIGHT" textFill="#a4a4a4" AnchorPane.topAnchor="6" AnchorPane.rightAnchor="10" />
+					</children>
+				</AnchorPane>
+				
+				<!-- save file -->
+				<AnchorPane onMouseClicked="#mainMenuSave" styleClass="menu-item" prefHeight="35" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
+					<children>
+						<Label fx:id="lblMainMenuSave"  AnchorPane.leftAnchor="10" AnchorPane.topAnchor="6" />
+						
+						<Label text="Ctrl + S" textAlignment="RIGHT" textFill="#a4a4a4" AnchorPane.topAnchor="6" AnchorPane.rightAnchor="10" />
+					</children>
+				</AnchorPane>
+				
+				<!-- save file as -->
+				<AnchorPane onMouseClicked="#mainMenuSaveAs" styleClass="menu-item" prefHeight="35" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="105">
+					<children>
+						<Label fx:id="lblMainMenuSaveAs"  AnchorPane.leftAnchor="10" AnchorPane.topAnchor="6" />
+					</children>
+				</AnchorPane>
+				
+				<!-- exit -->
+				<AnchorPane onMouseClicked="#mainMenuExit" styleClass="menu-item" prefHeight="35" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="140">
+					<children>
+						<Label fx:id="lblMainMenuExit"  AnchorPane.leftAnchor="10" AnchorPane.topAnchor="6" />
+						
+						<Label text="Ctrl + W" textAlignment="RIGHT" textFill="#a4a4a4" AnchorPane.topAnchor="6" AnchorPane.rightAnchor="10" />
+					</children>
+				</AnchorPane>
 			 </children>
 		</AnchorPane>
 	</children>

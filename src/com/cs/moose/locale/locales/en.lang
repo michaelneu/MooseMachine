@@ -1,0 +1,38 @@
+####################
+## 		menu	  ##
+####################
+
+menu-new		= New
+menu-open 		= Open file
+menu-save 		= Save file
+menu-save-as 	= Save file as...
+menu-exit		= Quit
+
+
+####################
+## 	   dialog	  ##
+####################
+dialog-file = file
+
+
+####################
+##   exceptions   ##
+####################
+exception-machine-message	= MachineException occured: \n%s
+exception-machine-title 	= Execution error
+
+exception-compiler-message	= Compiler error occured: \n%s
+exception-compiler-title	= Compiler error
+
+exception-jumppoint-message	= JumpPoint "%s" not found
+exception-syntax-message	= Invalid syntax in line %d
+
+exception-io-message		= Error opening file. Here's the stacktrace: \n%s
+exception-io-title			= IO Error
+  
+
+####################
+##   	editor    ##
+####################
+editor-file-not-saved-message = File not saved yet. \nDo you want to save it?
+editor-file-not-saved-title   = File not saved

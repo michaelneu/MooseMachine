@@ -1,0 +1,38 @@
+####################
+## 		menu	  ##
+####################
+
+menu-new		= Neu
+menu-open 		= Datei öffnen
+menu-save 		= Speichern
+menu-save-as 	= Speichern unter...
+menu-exit		= Beenden
+
+
+####################
+## 	   dialog	  ##
+####################
+dialog-file = Datei
+
+
+####################
+##   exceptions   ##
+####################
+exception-machine-message	= MachineException ist aufgetreten: \n%s
+exception-machine-title 	= Fehler beim Ausführen des Maschinencodes
+
+exception-compiler-message	= Fehler beim Kompilieren: \n%s
+exception-compiler-title	= Compile-Fehler
+
+exception-jumppoint-message	= Ungültiger Sprungpunkt "%s"
+exception-syntax-message	= Ungültige Syntax in Zeile %d
+
+exception-io-message		= Fehler beim Öffnen der Datei. Stacktrace: \n%s
+exception-io-title			= IO Fehler
+  
+
+####################
+##   	editor    ##
+####################
+editor-file-not-saved-message = Datei noch nicht gespeichert. \nTrotzdem fortfahren?
+editor-file-not-saved-title   = Datei nicht gespeichert

@@ -13,7 +13,7 @@ import com.cs.moose.locale.*;
 import com.cs.moose.machine.Compiler;
 import com.cs.moose.machine.Lexer;
 import com.cs.moose.machine.Machine;
-import com.cs.moose.ui.controls.Dialog;
+import com.cs.moose.ui.controls.MessageBox;
 import com.cs.moose.ui.controls.debugger.DebugView;
 import com.cs.moose.ui.controls.editor.CodeEditor;
 
@@ -34,7 +34,6 @@ public class IDE implements Initializable {
 	public static Stage Stage;
 	private static FileChooser fileChooser;
 	
-	private static ILocale locale = ILocale.getLocale();
 	private String currentFile;
 	private volatile CurrentView currentView = CurrentView.EDITOR;
 	
@@ -45,7 +44,8 @@ public class IDE implements Initializable {
 	@FXML
 	private Rectangle iconStop;
 	@FXML
-	private Label titlebarTextEditor, titlebarTextDebug;
+	private Label titlebarTextEditor, titlebarTextDebug,
+				   lblMainMenuNew, lblMainMenuOpen, lblMainMenuSave, lblMainMenuSaveAs, lblMainMenuExit;
 	@FXML
 	private Polygon titlebarPolygon, iconPlay, debugIconPlay;
 	@FXML
@@ -54,11 +54,18 @@ public class IDE implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// localize main menu
+		lblMainMenuNew.setText(Locale.MENU_NEW);
+		lblMainMenuOpen.setText(Locale.MENU_OPEN);
+		lblMainMenuSave.setText(Locale.MENU_SAVE);
+		lblMainMenuSaveAs.setText(Locale.MENU_SAVE_AS);
+		lblMainMenuExit.setText(Locale.MENU_EXIT);
+		
 		// initialize filechooser (set its filters)
 		fileChooser = new FileChooser();
-		FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("moose-" + locale.getFiles(), "*.moose");
+		FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("moose-" + Locale.DIALOG_FILE, "*.moose");
 		fileChooser.getExtensionFilters().add(filter);
-		filter = new FileChooser.ExtensionFilter("Text-" + locale.getFiles(), "*.txt");
+		filter = new FileChooser.ExtensionFilter("Text-" + Locale.DIALOG_FILE, "*.txt");
 		fileChooser.getExtensionFilters().add(filter);
 		
 		
@@ -99,9 +106,9 @@ public class IDE implements Initializable {
 	@FXML
 	private void toggleModes(MouseEvent event) {
 		// check for code editing beforehand
-		if (currentFile == null || editor.getCodeEdited()) {
+		if (currentView == CurrentView.EDITOR && (currentFile == null || editor.getCodeEdited())) {
 			// prompt user
-			if (!Dialog.confirm(locale.getCompileFileNotSavedWarning(), locale.getCodeNotSaved())) {
+			if (!MessageBox.confirm(Locale.EDITOR_FILE_NOT_SAVED_MESSAGE, Locale.EDITOR_FILE_NOT_SAVED_TITLE)) {
 				return;
 			}
 		}
@@ -121,12 +128,11 @@ public class IDE implements Initializable {
 				debug.startDebug(code,  currentMachine);
 				toggleView();
 			} catch (SyntaxException ex) {
-				ex.printStackTrace();
-				Dialog.showError(locale.getSyntaxErrorInLine(ex.getLine() + 1), locale.getCompilerError());
+				MessageBox.showError(String.format(Locale.EXCEPTION_SYNTAX_MESSAGE, ex.getLine() + 1), Locale.EXCEPTION_COMPILER_TITLE);
 			} catch (JumpPointException ex) {
-				Dialog.showError(locale.getCompilerJumpPointError(), locale.getCompilerError());
+				MessageBox.showError(String.format(Locale.EXCEPTION_JUMPPOINT_MESSAGE, ex.getPoint()), Locale.EXCEPTION_COMPILER_TITLE);
 			} catch (CompilerException ex) {
-				Dialog.showError(locale.getCompilerUnknownError(), locale.getCompilerError());
+				MessageBox.showError(String.format(Locale.EXCEPTION_COMPILER_MESSAGE, ex.getMessage()), Locale.EXCEPTION_COMPILER_TITLE);
 			}
 		} else {
 			toggleView();
@@ -195,7 +201,7 @@ public class IDE implements Initializable {
 	@FXML
 	private void mainMenuOpenFile(MouseEvent event) {
 		boolean edited = editor.getCodeEdited();
-		if (!edited || (edited && Dialog.confirm(locale.getOpenFileNotSavedWarning(), locale.getCodeNotSaved()))) {
+		if (!edited || (edited && MessageBox.confirm(Locale.EDITOR_FILE_NOT_SAVED_MESSAGE, Locale.EDITOR_FILE_NOT_SAVED_TITLE))) {
 			java.io.File file = fileChooser.showOpenDialog(Stage);
 			
 			if (file != null) {
@@ -214,7 +220,7 @@ public class IDE implements Initializable {
 					
 					editor.getCodeEdited();
 				} catch (Exception ex) {
-					// display messagebox
+					MessageBox.showError(String.format(Locale.EXCEPTION_IO_MESSAGE, ex.getMessage()), Locale.EXCEPTION_IO_TITLE);
 				}
 			}
 		}
@@ -230,7 +236,7 @@ public class IDE implements Initializable {
 				File.writeAllText(currentFile, code);
 				editor.getCodeEdited();
 			} catch (Exception ex) {
-				// display messagebox
+				MessageBox.showError(String.format(Locale.EXCEPTION_IO_MESSAGE, ex.getMessage()), Locale.EXCEPTION_IO_TITLE);
 			}
 		}
 	}
@@ -249,7 +255,7 @@ public class IDE implements Initializable {
 				
 				editor.getCodeEdited();
 			} catch (Exception ex) {
-				// display messagebox
+				MessageBox.showError(String.format(Locale.EXCEPTION_IO_MESSAGE, ex.getMessage()), Locale.EXCEPTION_IO_TITLE);
 			}
 		}
 	}
@@ -257,7 +263,7 @@ public class IDE implements Initializable {
 	private void mainMenuExit(MouseEvent event) {
 		boolean edited = editor.getCodeEdited();
 		
-		if (!edited || (edited && Dialog.confirm("Code nicht gespeichert. \nTrotzdem beenden?", "Code nicht gespeichert"))) {
+		if (!edited || (edited && MessageBox.confirm("Code nicht gespeichert. \nTrotzdem beenden?", "Code nicht gespeichert"))) {
 			System.exit(0);
 		}
 	}

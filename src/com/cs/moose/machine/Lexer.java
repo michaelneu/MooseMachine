@@ -34,7 +34,7 @@ public class Lexer {
 	}
 	
 	public static String stripNonCommands(String code) {
-		code = code.replaceAll("[A-Za-z0-9\\-]*\\:", "");
+		code = code.replaceAll(regexJump, "");
 		code = code.replaceAll(regexComments, "");
 		code = code.replaceAll("\\h+", "");
 		

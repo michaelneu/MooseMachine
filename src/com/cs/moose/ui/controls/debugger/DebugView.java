@@ -10,8 +10,10 @@ import javafx.scene.control.TextArea;
 
 import com.cs.moose.BackgroundWorker;
 import com.cs.moose.exceptions.MachineException;
+import com.cs.moose.locale.Locale;
 import com.cs.moose.machine.Machine;
 import com.cs.moose.types.MachineState;
+import com.cs.moose.ui.controls.MessageBox;
 import com.cs.moose.ui.controls.UserControl;
 import com.cs.moose.ui.controls.editor.CodeEditor;
 import com.cs.moose.ui.controls.memorytable.MemoryTable;
@@ -46,7 +48,8 @@ public class DebugView extends UserControl {
 			public void onProgressChanged(BackgroundWorker.ProgressChanged args) {
 				switch (args.getProgress()) {
 					case 0:
-						((MachineException)args.getUserState()).printStackTrace();
+						MachineException exception = (MachineException)args.getUserState();
+						MessageBox.showError(Locale.EXCEPTION_MACHINE_MESSAGE + "\n" + exception.getMessage(), Locale.EXCEPTION_MACHINE_TITLE);
 						break;
 						
 					case 1: 
@@ -139,7 +142,7 @@ public class DebugView extends UserControl {
 			this.machine.goForward();
 			updateDebugger();
 		} catch (MachineException ex) {
-			// display error
+			MessageBox.showError(Locale.EXCEPTION_MACHINE_MESSAGE + "\n" + ex.getMessage(), Locale.EXCEPTION_MACHINE_TITLE);
 		}
 	}
 	public boolean prev() {

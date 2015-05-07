@@ -3,6 +3,7 @@ package com.cs.moose;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.cs.moose.locale.Locale;
 import com.cs.moose.ui.IDE;
 
 import javafx.application.Application;
@@ -15,9 +16,12 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Main extends Application {
-	private static final String VERSION = "0.0.0";
+	private static final String VERSION = "0.0b";
 	
 	public static void main(String[] args) {
+		// first of all generate locale
+		Locale.generateLocale();
+		
 		launch(args);
 	}
 

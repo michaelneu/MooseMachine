@@ -19,7 +19,7 @@ public class Compiler {
 		
 		for (String point : requiredJumpDeclarations) {
 			if (!declaredJumpPoints.containsKey(point)) {
-				throw new JumpPointException("Impossible to jump to \"" + point + "\". JumpPoint not defined");
+				throw new JumpPointException("JumpPoint not defined", point);
 			}
 		}
 		
