@@ -34,5 +34,5 @@ exception-io-title			= IO Error
 ####################
 ##   	editor    ##
 ####################
-editor-file-not-saved-message = File not saved yet. \nDo you want to save it?
+editor-file-not-saved-message = File not saved yet. \nProceed anyway?
 editor-file-not-saved-title   = File not saved

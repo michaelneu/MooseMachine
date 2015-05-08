@@ -34,9 +34,9 @@ public class Lexer {
 	}
 	
 	public static String stripNonCommands(String code) {
-		code = code.replaceAll(regexJump, "");
+		code = code.replaceAll("[A-Za-z0-9\\-]*\\:", "");
 		code = code.replaceAll(regexComments, "");
-		code = code.replaceAll("\\h+", "");
+		code = code.replaceAll("\\h", "");
 		
 		return code;
 	}
@@ -159,5 +159,27 @@ public class Lexer {
 		}
 		
 		return jumps;
+	}
+	
+	public static int findNextCommandLine(String code, int targetLine) {
+		code = Lexer.stripNonCommands(code);
+		String[] codeLines = code.split("\n");
+		
+		int whitespaces = 0,
+			nonWhitespaces = 0;
+		
+		for (String line : codeLines) {
+			if (line.length() == 0) {
+				whitespaces++;
+			} else {
+				if (nonWhitespaces == targetLine) {
+					break;
+				} else {
+					nonWhitespaces++;
+				}
+			}
+		}
+		
+		return whitespaces + nonWhitespaces + 1;
 	}
 }

@@ -11,6 +11,7 @@ import javafx.scene.control.TextArea;
 import com.cs.moose.BackgroundWorker;
 import com.cs.moose.exceptions.MachineException;
 import com.cs.moose.locale.Locale;
+import com.cs.moose.machine.Lexer;
 import com.cs.moose.machine.Machine;
 import com.cs.moose.types.MachineState;
 import com.cs.moose.ui.controls.MessageBox;
@@ -108,10 +109,9 @@ public class DebugView extends UserControl {
 		
 		this.memoryTable.setMemory(machine.toMachineState().getMemory());
 
+		int initial = Lexer.findNextCommandLine(code, 0);
+		this.editor.setInitialLine(initial);
 		this.editor.setCode(code);
-		int initialLine = editor.findNextCommandLine(0);
-		this.editor.setInitialLine(initialLine);
-		
 
 		this.stdout.setText("");
 		this.lblAccu.setText("0");
