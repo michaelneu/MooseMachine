@@ -17,7 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class MemoryTable extends UserControl {
-	private final double firstColumnPercentage = 75 / 570.0;
+	private final double firstColumnPercentage = 75 / 625.0;
 	@FXML
 	private TableView table;
 	
@@ -60,7 +60,7 @@ public class MemoryTable extends UserControl {
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldWidth, Number newWidth) {
 				double width = newWidth.doubleValue() - 7,
 						firstWidth = width * firstColumnPercentage,
-						otherWidth = (width - firstWidth) / 9;
+						otherWidth = (width - firstWidth) / 10;
 				
 				TableColumn first = (TableColumn)columns[0];
 				first.prefWidthProperty().set(firstWidth);

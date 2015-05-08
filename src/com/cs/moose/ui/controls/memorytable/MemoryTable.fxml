@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@MemoryTable.css" prefWidth="570">
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns:fx="http://javafx.com/fxml" stylesheets="@MemoryTable.css" prefWidth="625">
     <children>
 		<TableView fx:id="table" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 			<columns>
@@ -16,6 +16,7 @@
 					</styleClass>
 				</TableColumn>
 
+				<TableColumn prefWidth="55" text="0" />
 				<TableColumn prefWidth="55" text="1" />
 				<TableColumn prefWidth="55" text="2" />
 				<TableColumn prefWidth="55" text="3" />
