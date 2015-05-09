@@ -7,14 +7,6 @@ branches:
 notifications:
   email: false
 
-deploy:
-  provider: releases
-  api_key:
-    secure: Y9bVZqY9DzNH9TIl36RMc01Hk+qvl0vDh/nRsclwXho+BzsKF8pNwhxoPs6mK0rWb2YAhcdmEbjmMrAyZknt7krjG5KDSM5FC2RmY2RIyxyDtVQZtA6r6rH6q0rvCA/AVgs+xjwUwNB+I0pG5kZPJN19xekYVXpAQtto/HtNtIjiOkGhMSCwxRQllVAAkmpUx4O9f+7eFBWMntmmaZZd9+N9/h4YqC3V4k6QRLi+0LU4hM9GuHEf2WYlPxc2bj+mDqtUYi/Xa0R4lEC/UCerccYuHwvrwa9iLzsgCakk6EzJETAPTEgGh8j//QVFktRmygh8AKdeeFxuK4+jnjG0pVlTxMGNRMw6I/ipPQiEDgCoGhdijhUHt9nX+3g8PMNuS0aYHSoQcDurWvUS7cjo+G90IPwgUm3MSdXuTfNiZZrOt62onn5WXjv2gRrZ98OGXdgAO9PBu6fkEhCbGsoJFLtF/+Hp2uLzgLQr9hLsI5AFhThtlCVcUnaKUAxrT30j/eg/aVVKTyLqeyp3CWn5UaADC2dYqwayquRGs/J5onPldRjsyOIQm/oHFW8h+HaXky1BYGB5Y+yVxrCPc9Od7ICjIVjZsU0ACAi1qVXUsbHukNHMbvyZM3cxr7cUlg8/YVsnctXtqbcT2OOVC9fVpiRDrt73cg4/QQGATa3IOhI=
-  file: build/libs/*.jar
-  on:
-    repo: minedev/MooseMachine
-
 before_install:
     - rm -rf ~/.linuxbrew
     - yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"
@@ -23,3 +15,17 @@ before_install:
     - export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
     - brew install jdk
     - export JAVA_HOME=/home/travis/.linuxbrew/Cellar/jdk/1.8.0-40
+
+before_deploy:
+  - export RELEASE_JAR_FILE=$(ls build/libs/*.jar)
+  - echo "Deploying $RELEASE_JAR_FILE to GitHub"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: Y9bVZqY9DzNH9TIl36RMc01Hk+qvl0vDh/nRsclwXho+BzsKF8pNwhxoPs6mK0rWb2YAhcdmEbjmMrAyZknt7krjG5KDSM5FC2RmY2RIyxyDtVQZtA6r6rH6q0rvCA/AVgs+xjwUwNB+I0pG5kZPJN19xekYVXpAQtto/HtNtIjiOkGhMSCwxRQllVAAkmpUx4O9f+7eFBWMntmmaZZd9+N9/h4YqC3V4k6QRLi+0LU4hM9GuHEf2WYlPxc2bj+mDqtUYi/Xa0R4lEC/UCerccYuHwvrwa9iLzsgCakk6EzJETAPTEgGh8j//QVFktRmygh8AKdeeFxuK4+jnjG0pVlTxMGNRMw6I/ipPQiEDgCoGhdijhUHt9nX+3g8PMNuS0aYHSoQcDurWvUS7cjo+G90IPwgUm3MSdXuTfNiZZrOt62onn5WXjv2gRrZ98OGXdgAO9PBu6fkEhCbGsoJFLtF/+Hp2uLzgLQr9hLsI5AFhThtlCVcUnaKUAxrT30j/eg/aVVKTyLqeyp3CWn5UaADC2dYqwayquRGs/J5onPldRjsyOIQm/oHFW8h+HaXky1BYGB5Y+yVxrCPc9Od7ICjIVjZsU0ACAi1qVXUsbHukNHMbvyZM3cxr7cUlg8/YVsnctXtqbcT2OOVC9fVpiRDrt73cg4/QQGATa3IOhI=
+  file_glob: true
+  file: "$(RELEASE_JAR_FILE)"
+  skip_cleanup: true
+  on:
+    repo: minedev/MooseMachine
