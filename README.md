@@ -1,4 +1,5 @@
 #MooseMachine
+[![Build Status](https://travis-ci.org/minedev/MooseMachine.svg?branch=master)](https://travis-ci.org/minedev/MooseMachine)
 
 ##Motivation
 Der Informatikunterricht der gymnasialen Oberstufe beinhaltet einige Unterrichtseinheiten über die von-Neumann-Architektur und die Programmierung einer dieser Architektur ähnlichen Maschine mit der Java-Applikation [Minmaschine](http://schule.awiedemann.de/minimaschine.html). Diese Software visualisiert mit Hilfe einer vereinfachten Assembler-Sprache die Vorgänge innerhalb einer CPU, von der Befehlsholphase aus dem RAM bis hin zur Berechnung in der ALU. Trotz einiger Updates kann diese Applikation durch bestimmte Code-Konstellationen zum Absturz gebracht werden. Um dieses Problem zu beheben wurde die MooseMachine entwickelt. 
