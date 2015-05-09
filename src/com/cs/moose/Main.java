@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Main extends Application {
-	private static final String VERSION = "0.0b";
+	private static final String VERSION = "0.1";
 	
 	public static void main(String[] args) {
 		// first of all generate locale

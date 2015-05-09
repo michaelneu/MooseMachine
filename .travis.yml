@@ -30,3 +30,4 @@ deploy:
   on:
     repo: minedev/MooseMachine
     tags: true
+    all_branches: true
