@@ -1,23 +1,16 @@
 package com.cs.moose.io;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
-@SuppressWarnings("resource")
 public class Resource {
 	public static String getContent(Class<?> caller, String path) {
 		InputStream stream = caller.getResourceAsStream(path);
 		
-		if (stream == null) {
+		try {
+			return File.readAll(stream);
+		} catch (IOException e) {
 			return null;
-		} else {
-			Scanner reader = new Scanner(stream).useDelimiter("\\A");
-			
-			if (reader.hasNext()) {
-				return reader.next();
-			} else {
-				return null;
-			}
 		}
 	}
 }

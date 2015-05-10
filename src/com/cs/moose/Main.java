@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Main extends Application {
-	private static final String VERSION = "0.1";
+	private static final String VERSION = "0.1a";
 	
 	public static void main(String[] args) {
 		// first of all generate locale
@@ -30,8 +30,8 @@ public class Main extends Application {
 		IDE.Stage = stage;
 		
 		stage.setTitle("MooseMachine " + VERSION);
-		//Image icon = new Image(getClass().getResourceAsStream("icon.png"));
-		//stage.getIcons().add(icon);
+		Image icon = new Image(getClass().getResourceAsStream("icon.png"));
+		stage.getIcons().add(icon);
 		
 		// safely exit and kill all threads
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
