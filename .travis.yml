@@ -1,5 +1,10 @@
 language: java
 
+branches:
+  only:
+    - master
+    - /v\d+\.\d+[a-z]/
+
 notifications:
   email: false
 
@@ -14,7 +19,7 @@ before_install:
 
 before_deploy:
   - export RELEASE_JAR_FILE=$(ls build/libs/*.jar)
-  - echo "Deploying $RELEASE_JAR_FILE to GitHub"
+  - echo "Deploying ${RELEASE_JAR_FILE} to GitHub"
 
 deploy:
   provider: releases

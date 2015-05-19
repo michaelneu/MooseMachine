@@ -1,7 +1,9 @@
 #MooseMachine [![Build Status](https://travis-ci.org/minedev/MooseMachine.svg?branch=master)](https://travis-ci.org/minedev/MooseMachine)
 
 ##Motivation
-Der Informatikunterricht der gymnasialen Oberstufe beinhaltet einige Unterrichtseinheiten über die von-Neumann-Architektur und die Programmierung einer dieser Architektur ähnlichen Maschine mit der Java-Applikation [Minmaschine](http://schule.awiedemann.de/minimaschine.html). Diese Software visualisiert mit Hilfe einer vereinfachten Assembler-Sprache die Vorgänge innerhalb einer CPU, von der Befehlsholphase aus dem RAM bis hin zur Berechnung in der ALU. Trotz einiger Updates kann diese Applikation durch bestimmte Code-Konstellationen zum Absturz gebracht werden. Um dieses Problem zu beheben wurde die MooseMachine entwickelt. 
+Der Informatikunterricht der gymnasialen Oberstufe beinhaltet einige Unterrichtseinheiten über die von-Neumann-Architektur und die Programmierung einer dieser Architektur ähnlichen Maschine mit der Java-Applikation [Minmaschine](http://schule.awiedemann.de/minimaschine.html). Diese Software visualisiert mit Hilfe einer vereinfachten Assembler-Sprache die Vorgänge innerhalb einer CPU, von der Befehlsholphase aus dem RAM bis hin zur Berechnung in der ALU. Trotz einiger Updates kann diese Applikation durch bestimmte Code-Konstellationen zum Absturz gebracht werden. Um dies und andere Probleme zu beheben wurde die MooseMachine entwickelt. 
+
+[![Screenshot des Editors](readme/editor.png)](readme/editor.png)
 
 ##Funktionsumfang
 - Die MooseMachine basiert auf JavaFX 8, was auf Code-Basis eine höhere Flexibilität durch FXML und CSS im Design ermöglicht
@@ -12,9 +14,10 @@ Der Informatikunterricht der gymnasialen Oberstufe beinhaltet einige Unterrichts
 - Die Syntax der Minimaschine wurde um das `DWORD`-Keyword gekürzt, dafür um die drei Befehle `PUT`, `PUTS`, `PUTA` erweitert. Diese Befehle ermöglichen die Ausgabe von Speicherzellen, Strings und dem Akkumulator zur Visualisierung von Daten
 - Die MooseMachine wurde auf Geschwindigkeit optimiert. Ein Programm, das bis zu 2^15 - 1 zählt (der größten erreichbaren Zahl bei 16 Bit Integern) benötigt in der Minimaschine ~1.5 Sekunden. Die MooseMachine benötigt hierfür nur wenige Millisekunden, ohne Anzeige in der GUI benötigt das Programm für seine Abarbeitung und dem "Zurückspulen" auf den Anfangszustand nur ~70ms, ca. 200x so schnell wie die Minimaschine. 
 
+[![Screenshot des Debuggers](readme/debug.png)](readme/debug.png)
 
 ##Schreiben von Programmen in der MooseMachine
-Die Syntax der MooseMachine entspricht der [Syntax der Minimaschine](http://schule.awiedemann.de/manualmini/index.html), sie wurde lediglich um das `DWORD`-Keyword gekürzt. Beispielprogramme befinden sich im Unterordner `examples`. Ein solches Programm kann bspw. so aussehen: 
+Die Syntax der MooseMachine entspricht der [Syntax der Minimaschine](http://schule.awiedemann.de/manualmini/index.html), sie wurde lediglich um das `DWORD`-Keyword gekürzt. Eine für die MooseMachine angepasste Befehlsreferenz befindet sich [hier](readme/COMMANDS.md). Beispielprogramme befinden sich im Unterordner `examples`. Ein solches Programm kann bspw. so aussehen: 
 
 ```
 LOADI 	100 		// Zahl 100 in den Akkumulator laden
