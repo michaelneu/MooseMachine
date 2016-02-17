@@ -19,10 +19,21 @@ public class Main extends Application {
 	private static final String VERSION = "0.1b";
 	
 	public static void main(String[] args) {
-		// first of all generate locale
-		Locale.generateLocale();
-		
-		launch(args);
+		if (args.length == 0) {
+			// gui mode, first of all generate locale
+			Locale.generateLocale();
+			
+			launch(args);
+		} else {
+			// headless mode
+			try {
+				MachineRunner.run(args[0]);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+
+				return;
+			}
+		}
 	}
 
 	@Override
