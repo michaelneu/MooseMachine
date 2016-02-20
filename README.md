@@ -1,51 +1,53 @@
-#MooseMachine [![Build Status](https://travis-ci.org/michaelneu/MooseMachine.svg?branch=master)](https://travis-ci.org/michaelneu/MooseMachine)
+#MooseMachine [![Build Status](https://travis-ci.org/michaelneu/MooseMachine.svg?branch=master)](https://travis-ci.org/michaelneu/MooseMachine) [:de:](README-de.md) [:gb:](README.md)
 
 ##Motivation
-Der Informatikunterricht der gymnasialen Oberstufe beinhaltet einige Unterrichtseinheiten über die von-Neumann-Architektur und die Programmierung einer dieser Architektur ähnlichen Maschine mit der Java-Applikation [Minmaschine](http://schule.awiedemann.de/minimaschine.html). Diese Software visualisiert mit Hilfe einer vereinfachten Assembler-Sprache die Vorgänge innerhalb einer CPU, von der Befehlsholphase aus dem RAM bis hin zur Berechnung in der ALU. Trotz einiger Updates kann diese Applikation durch bestimmte Code-Konstellationen zum Absturz gebracht werden. Um dies und andere Probleme zu beheben wurde die MooseMachine entwickelt. 
+The computer science classes in German grammar schools contain several lessens about the von-Neumann-architecture and ways to program such a machine using the Java application [Minmaschine](http://schule.awiedemann.de/minimaschine.html). It uses a simplified version of a language similar to Assembler and visualizes the processes inside of the CPU. Although the Minimaschine was updated, it still can be crashed by badly written code. The main goal of the MooseMachine is, to fix this and some other problems. 
 
-[![Screenshot des Editors](readme/editor.png)](readme/editor.png)
 
-##Funktionsumfang
-- Die MooseMachine basiert auf JavaFX 8, was auf Code-Basis eine höhere Flexibilität durch FXML und CSS im Design ermöglicht
-- Das Problem eines "zufälligen" Absturzes bzw. einer blockierten Oberfläche wurde durch das Ausführen des Maschinencodes in einem separaten Thread umgangen
-- Die MooseMachine ermöglicht das Debuggen des Codes in Einzelschritten, sowohl vorwärts als auch rückwärts. Die aktuelle Code-Position im Speicher wird im Code neben dem Speicher visualisiert
-- Der Editor basiert auf dem CodeMirror Browser-Editor. Durch diesen bietet die MooseMachine wichtiges Syntax-Highlighting
-- Die Applikation ist vollständig lokalisierbar, standardmäßig wird eine deutsche und englische Lokalisierung mitgeliefert. Sollte die aktuelle Systemsprache nicht mitgeliefert werden, so wird die englische Lokalisierung verwendet
-- Die Syntax der Minimaschine wurde um das `DWORD`-Keyword gekürzt, dafür um die drei Befehle `PUT`, `PUTS`, `PUTA` erweitert. Diese Befehle ermöglichen die Ausgabe von Speicherzellen, Strings und dem Akkumulator zur Visualisierung von Daten
-- Die MooseMachine wurde auf Geschwindigkeit optimiert. Ein Programm, das bis zu 2^15 - 1 zählt (der größten erreichbaren Zahl bei 16 Bit Integern) benötigt in der Minimaschine ~1.5 Sekunden. Die MooseMachine benötigt hierfür nur wenige Millisekunden, ohne Anzeige in der GUI benötigt das Programm für seine Abarbeitung und dem "Zurückspulen" auf den Anfangszustand nur ~70ms, ca. 200x so schnell wie die Minimaschine. 
+[![Screenshot of the editor](readme/editor.png)](readme/editor.png)
 
-[![Screenshot des Debuggers](readme/debug.png)](readme/debug.png)
+##Features
+- Based on JavaFX 8
+- All executed code is run in a separate thread to ensure the MooseMachine can't crash due to a `while (true)` loop
+- Debugging, including jumping forwards and backwards. The current instruction pointer is visualized in the code view on the right hand of the memory table
+- Syntax highlight by using the CodeMirror editor
+- Localization: english and german l10n is included, if the system's locale is [missing](src/com/cs/moose/locale/locales), then english is chosen as default. 
+- Almost the same syntax as the Minimaschine, although the `DWORD` is missing, the three commands `PUT`, `PUTS` and `PUTA` were added, which allow printing to the stdout
+- Huge execution speed boost: A program counting to 2^15 - 1 (max 16 bit integer value) takes about 1.5s on the Minimaschine, the MooseMachine only takes some milliseconds. If used in headless mode, then the MooseMachine takes about 70ms, about 200x faster than the Minimaschine
 
-##Schreiben von Programmen in der MooseMachine
-Die Syntax der MooseMachine entspricht der [Syntax der Minimaschine](http://schule.awiedemann.de/manualmini/index.html), sie wurde lediglich um das `DWORD`-Keyword gekürzt. Eine für die MooseMachine angepasste Befehlsreferenz befindet sich [hier](readme/COMMANDS.md). Beispielprogramme befinden sich im Unterordner `examples`. Ein solches Programm kann bspw. so aussehen: 
+[![Screenshot of the debugger](readme/debug.png)](readme/debug.png)
+
+##Writing programs
+The syntax of the MooseMachine is equivalent to the [syntax of the Minimaschine](http://schule.awiedemann.de/manualmini/index.html), but is missing the `DWORD` command. You can find a command reference [here](readme/COMMANDS.md). A sample program may look like this:
 
 ```
-LOADI 	100 		// Zahl 100 in den Akkumulator laden
-STORE 	100			// in Zelle 100 abspeichern
+LOADI   100           // load 100 into the accumulator
+STORE   100           // and store it in cell 100
 
-PUTS	"Zahl 1: "	// Ausgabe des Strings
-PUT		100			// Zelle 100 ausgeben
-PUTS	"\n"		// Zeilenumbruch ausgeben
-LOADI 	200			// Zahl 200 in den Akkumulator laden
-PUTS	"Zahl 2: "	
-PUTA				// Akkumulator ausgeben
-PUTS	"\n"
+PUTS    "number 1: "  // print the string
+PUT     100           // print cell 100
+PUTS    "\n"
+LOADI   200
+PUTS    "number 2: "    
+PUTA                  // print the accumulator
+PUTS    "\n"
 
-ADD		100			// Zelle 100 zu Akkumulator addieren
-PUTS	"Summe:  "		
+ADD     100           // add cell 100 to the accumulator
+PUTS    "sum:      "      
 PUTA
 
-HOLD				// Maschine anhalten
-```
-Die dazugehörige Konsolenausgabe sieht in diesem Fall so aus: 
-```
-Zahl 1: 100
-Zahl 2: 200
-Summe:  300
+HOLD                  // stop the machine
 ```
 
-##Verwendung in Java
-Die MooseMachine kann auch aus Java verwendet werden. Hierfür muss die .jar in den Klassenpfad eingebunden werden und das Package `com.cs.moose.machine` importiert werden, beispielsweise so: 
+This program results in following console output:
+```
+number 1: 100
+number 2: 200
+sum:      300
+```
+
+##Usage in Java
+You can use the MooseMachine from Java directly because of the bindings in `com.cs.moose.machine`. A sample program may look like this: 
 
 ```java
 import java.io.IOException;
@@ -57,38 +59,37 @@ import com.cs.moose.machine.Machine;
 
 public class Main {
     public static void main(String[] args) {
-        // sanity check
         if (args.length != 2) {
-            System.out.println("Bitte Dateinamen als 2. Parameter angeben");
+            System.out.println("please include a filename");
             return;
         }
 
         try {
-	        String code = File.readAllText(args[1]);        // Datei aus Aufrufparameter
-	        Lexer lexer = new Lexer(code);                  // Code testen
-	        Machine machine = Compiler.getMachine(lexer);   // Code kompilieren
-	
-	        for (int i = 0; i < 1000; i++) {
-	            machine.goForward(); // Code ausführen
-	        }
-	        
-	        System.out.println(machine.toString(20));                                    // die ersten 200 Speicherzellen ausgeben
-	        System.out.println("\n\nSTDOUT: \n" + machine.toMachineState().getStdout()); // den Standard-Output ausgeben
+            String code = File.readAllText(args[1]);
+            Lexer lexer = new Lexer(code);                  // run the lexer
+            Machine machine = Compiler.getMachine(lexer);   // compile the code to a machine
+    
+            for (int i = 0; i < 1000; i++) {
+                machine.goForward(); // execute
+            }
+            
+            System.out.println(machine.toString(20));                                    // print the first 200 memory cells
+            System.out.println("\n\nSTDOUT: \n" + machine.toMachineState().getStdout()); // and the stdout
         } catch (IOException ex) {
-            System.out.println("Kann Datei nicht lesen");
+            System.out.println("can't read ");
         } catch (SyntaxException ex) {
-            System.out.println("Inkorrekte Syntax in Zeile " + ex.getLine());
+            System.out.println("syntax error in line " + ex.getLine());
         } catch (CompilerException ex) {
-            System.out.println("Compiler-Fehler: " + ex.getMessage());
+            System.out.println("compiler error: " + ex.getMessage());
         } catch (JumpPointException ex) {
-            System.out.println("Punkt \"" + ex.getPoint() + "\" nicht definiert");
+            System.out.println("invalid jump: \"" + ex.getPoint() + "\" is undefined");
         } catch (MachineException ex) {
-            System.out.println("Fehler beim Ausführen des Maschinencodes: " + ex.getMessage());
+            System.out.println("error: " + ex.getMessage());
         }
     }
 }
 ```
 
 
-##Lizenz
-Die MooseMachine wird unter der [MIT-Lizenz](LICENSE.txt) veröffentlicht. 
+##License
+The MooseMachine is released under the [MIT license](LICENSE.txt). 
